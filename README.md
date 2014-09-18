@@ -1,5 +1,5 @@
 SSNoC User Interface
-=========
+==========
 
 Introduction
 
