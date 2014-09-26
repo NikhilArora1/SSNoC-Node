@@ -18,7 +18,7 @@ require('./config/passport')(passport);
 
 app.set("ipaddr", "0.0.0.0");
 
-app.set("port", process.env.PORT | 8888);
+app.set("port", process.env.PORT || 8888);
 
 app.set("views", __dirname + "/app/views");
 
