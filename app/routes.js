@@ -10,6 +10,10 @@ module.exports = function(app, _, io, participants, passport) {
 
   app.get("/welcome", isLoggedIn, user_controller.getWelcome);
 
+  app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
+  
+  app.get("/PeoplePage", isLoggedIn, user_controller.getPeoplePage);
+  
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
   app.get("/logout", isLoggedIn, user_controller.getLogout);
