@@ -6,12 +6,23 @@
                 <style type="text/css">
                 h3 {background-color: #F5F5F5;color: green;font-size:2em;border:1px solid #DCDCDC}
                 table {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+                input[type=submit]{color:green;background-color:#F5F5F5}
+                select {color:green;background-color:#F5F5F5;}
+                form {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}
                 tr {font-size:1.3em;color:green}
-		td {text-align:left;width:50%}	
+        td {text-align:left;width:50%}  
                 </style>
         </head>
         <body>
                 <h3>&nbsp;<br/>&nbsp;People Directory<br/>&nbsp;</h3>
+                <form action="/status" method="post">
+                        <input type="submit" >
+                        <select name="statusCode">
+                            <option value="GREEN">OK</option>
+                            <option value="YELLOW">Help</option>
+                            <option value="RED">Emergency</option>
+                        </select>
+                </form>
                 <div id="table">
                     <% for(var i=0;i<users.length;i++){                  %>
                         <table>

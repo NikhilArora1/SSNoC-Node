@@ -13,6 +13,8 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
   
   app.get("/people1", isLoggedIn, user_controller.getPeoplePage);
+  
+  app.post("/status", user_controller.postPeoplePage);
 
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);

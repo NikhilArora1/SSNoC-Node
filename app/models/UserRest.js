@@ -9,6 +9,12 @@ function User(user_name, password, new_user){
     password : password,
     new_user: new_user
   };
+  this.setStatus = function(status){
+    this.local.status = status;
+  };
+  this.getStatus = function(){
+    return this.local.status;
+  };
 }
 
 User.generateHash = function(password) {
