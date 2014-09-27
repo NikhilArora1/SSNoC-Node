@@ -1,0 +1,24 @@
+<!DOCTYPE=html>
+<html>
+        <head>
+                <meta charset="UTF-8">
+                <title>PeopleDirectory</title>
+                <style type="text/css">
+                h3 {background-color: #F5F5F5;color: green;font-size:2em;border:1px solid #DCDCDC}
+                table {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+                tr {font-size:1.3em;color:green}
+		td {text-align:left;width:50%}	
+                </style>
+        </head>
+        <body>
+                <h3>&nbsp;<br/>&nbsp;People Directory<br/>&nbsp;</h3>
+                <div id="table">
+                    <% for(var i=0;i<users.length;i++){                  %>
+                        <table>
+                            <tr><td><%=users[i].name%></td><td><%=users[i].status%></td></tr>
+                        </table>
+                    <% } %>
+                </div>
+        </body>
+</html>
+

@@ -22,7 +22,7 @@ app.set("port", process.env.PORT || 8888);
 
 app.set("views", __dirname + "/app/views");
 
-app.set("view engine", "jade");
+app.set("view engine", "ejs");
 
 app.use(express.logger('dev'));
 

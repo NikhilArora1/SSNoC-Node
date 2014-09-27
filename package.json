@@ -9,6 +9,7 @@
     "express": "3.1.0",
     "request": "2.36.0",
     "jade": "*",
+    "ejs" : "~0.8.5",
     "socket.io": "~0.9.6",
     "underscore": "*",
     "bcrypt-nodejs" : "latest",

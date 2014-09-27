@@ -16,10 +16,11 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     },
     
     getPeoplePage : function(req,res) {
+      
     	var user_name=req.session.passport.user.user_name;
     	User.getUsers(user_name, function(err,users) {
     		if(users!==null) {
-    			res.json(200, { users: users });
+    			res.render('people1', { users: users });
     		}
     	});
     	},
@@ -54,6 +55,35 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
 
     getWelcome : function(req, res) {
       res.render('welcome', {title: "Hello " + req.session.passport.user.user_name + " !!"} );
+    },
+    
+    getJoinCommunity : function(req, res){
+      res.render('joinCommunity', {message: req.flash('joinMessage')});
+    },
+    
+    postJoinCommunity : function(req, res, next) {
+      passport.authenticate('local-joinCommunity', function(err, user, info){
+        if(err)
+          return next(err);
+        
+        if(!user)
+          return res.redirect('/joinCommunity');
+        
+        req.logIn(user, function(err){
+          if(err)
+            return next(err);
+            
+          participants.all.push({'userName' : user.local.name});
+
+          if(user.local.new_user){
+            return res.redirect('/WelcomePage');
+          } else {
+            return res.redirect('/people1');
+          }
+          
+        });
+        
+      })(req, res, next);
     }
   };
 };

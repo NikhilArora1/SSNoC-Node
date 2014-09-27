@@ -2,10 +2,11 @@ var bcrypt = require('bcrypt-nodejs');
 var request = require('request');
 var rest_api = require('../../config/rest_api');
 
-function User(user_name, password){
+function User(user_name, password, new_user){
   this.local = {
     name : user_name,
-    password : password
+    password : password,
+    new_user: new_user
   };
 }
 
@@ -31,7 +32,7 @@ User.getUser = function(user_name, callback) {
       return;
     }
     if (res.statusCode === 200) {
-      var user = new User(body.userName, body.password);
+      var user = new User(body.userName, body.password, false);
       callback(null, user);
       return;
     }
@@ -50,7 +51,7 @@ User.getUsers = function(username, callback) {
 		}
 		if (res.statusCode == 200) {
 			var users = body.map(function(item, idx, arr){
-		        return new User(item.userName, item.status);
+		        return new User(item.userName, item.status, false);
 		      });
 
 		      users.sort(function(a,b) {
@@ -70,7 +71,7 @@ User.getAllUsers = function(callback) {
     }
     if (res.statusCode === 200) {
       var users = body.map(function(item, idx, arr){
-        return new User(item.userName, item.password);
+        return new User(item.userName, item.password, false);
       });
 
       users.sort(function(a,b) {
@@ -104,10 +105,45 @@ User.saveNewUser = function(user_name, password, callback) {
       callback(res.body, null);
       return;
     }
-    var new_user = new User(body.userName, password, undefined);
+    var new_user = new User(body.userName, password, true);
     callback(null, new_user);
     return;
   });
 };
+
+// callback should be of the form
+// function(err, successful, failureReason)
+// where:
+//    err - error from server
+//    successful - boolean whether the call was successful or not
+//    failureReason - an object specifying the error code
+//        and the failure message reason
+User.authenticate = function(username, password, callback){
+  var options = {
+    url : rest_api.authenticate_user(username),
+    body : {password: password},
+    json: true
+  }
+  
+  request.post(options, function(err, res, body){
+    if(err){
+      callback(err, null);
+      return;
+    }
+    
+    if(res.statusCode === 200){
+      callback(null, true);
+    } else {
+      var reason = "Unknown Error";
+      if(res.statusCode === 401){
+        reason = "Username and password do not match."
+      } else if(res.statusCode === 404){
+        reason = "User does not exist.";
+      }
+      callback(null, false, {errorCode: res.statusCode, reason: reason});
+    }
+    
+  });
+}
 
 module.exports = User;

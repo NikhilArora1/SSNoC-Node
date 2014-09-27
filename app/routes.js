@@ -12,8 +12,8 @@ module.exports = function(app, _, io, participants, passport) {
 
   app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
   
-  app.get("/PeoplePage", isLoggedIn, user_controller.getPeoplePage);
-  
+  app.get("/people1", isLoggedIn, user_controller.getPeoplePage);
+
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
   app.get("/logout", isLoggedIn, user_controller.getLogout);
@@ -24,6 +24,9 @@ module.exports = function(app, _, io, participants, passport) {
   }));
 
   app.get("/people", isLoggedIn, people_controller.getPeople);
+
+  app.get("/joinCommunity", user_controller.getJoinCommunity);
+  app.post("/joinCommunity", user_controller.postJoinCommunity);
 };
 
 function isLoggedIn(req, res, next) {
