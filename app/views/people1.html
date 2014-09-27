@@ -1,0 +1,53 @@
+<!DOCTYPE=html>
+<html>
+        <head>
+                <meta charset="UTF-8">
+                <title>PeopleDirectory</title>
+                <style type="text/css">
+                h3 {background-color: #F5F5F5;color: green;font-size:2em;border:1px solid #DCDCDC}
+                table {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+                tr {font-size:1.3em;color:green}
+		td {text-align:left;width:50%}	
+                </style>
+        </head>
+        <body>
+                <h3>&nbsp;<br/>&nbsp;People Directory<br/>&nbsp;</h3>
+                <div id="table"></div>
+
+                    
+                <script>
+                /*people=[["jack","ok"],["tom","help"],["rose","emergency"],["bin","ok"]];
+                var container = document.getElementById("table");
+                var table=document.createElement("table");
+                
+                for(var i=0;i<people.length;i++){
+                        var tr=table.insertRow(i);
+
+                        for(var j=0;j<2;j++){
+                                var td=tr.insertCell(j);
+                                var content=document.createTextNode(people[i][j]);
+                                td.appendChild(content);
+                        }
+                }
+                container.appendChild(table);
+		*/
+	 	people=[{"name":"Jack","status":"ok"},{"name":"Jack","status":"ok"},{"name":"Tom","status":"help"},
+			{"name":"John","status":"emergency"}];	
+		var container = document.getElementById("table");
+		for(var i=0;i<people.length;i++){
+			var table=document.createElement("table");
+			var tr=table.insertRow(0);
+			var td0=tr.insertCell(0);
+			var td1=tr.insertCell(1);
+			var content0=document.createTextNode(people[i].name);
+			var content1=document.createTextNode(people[i].status);
+			td0.appendChild(content0);
+			td1.appendChild(content1);
+			container.appendChild(table);
+
+		}
+			
+                </script>
+        </body>
+</html>
+
