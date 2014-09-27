@@ -1,5 +1,6 @@
 var express = require("express"),
   app = express(),
+  util = require("./app/util"),
   http = require("http").createServer(app),
   io = require("socket.io").listen(http),
   _ = require("underscore"),
@@ -49,5 +50,5 @@ User.getAllUsers(function(err, users) {
 });
 
 http.listen(app.get("port"), app.get("ipaddr"), function() {
-  console.log("Server up and running. Go to http://" + app.get("ipaddr") + ":" + app.get("port"));
+  console.log(util.formatDate(new Date()) + " Server up and running. Go to http://" + app.get("ipaddr") + ":" + app.get("port"));
 });

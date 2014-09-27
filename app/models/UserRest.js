@@ -1,6 +1,7 @@
 var bcrypt = require('bcrypt-nodejs');
 var request = require('request');
 var rest_api = require('../../config/rest_api');
+var util = require('../util')
 
 function User(user_name, password, new_user){
   this.local = {
@@ -92,7 +93,9 @@ User.getAllUsers = function(callback) {
 User.saveNewUser = function(user_name, password, callback) {
   var options = {
     url : rest_api.post_new_user,
-    body : {userName: user_name, password: password},
+    body : {userName: user_name, 
+            password: password, 
+            createdAt: util.formatDate(new Date())},
     json: true
   };
 
