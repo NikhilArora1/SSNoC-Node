@@ -11,6 +11,19 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
       res.redirect('/');
     },
 
+    getWelcomePage : function(req, res) {
+    	res.render('WelcomePage');
+    },
+    
+    getPeoplePage : function(req,res) {
+    	var user_name=req.session.passport.user.user_name;
+    	User.getUsers(user_name, function(err,users) {
+    		if(users!==null) {
+    			res.json(200, { users: users });
+    		}
+    	});
+    	},
+    
     getSignup : function(req, res) {
       res.render('signup', {message: req.flash('signupMessage')});
     },

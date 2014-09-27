@@ -42,6 +42,26 @@ User.getUser = function(user_name, callback) {
   });
 };
 
+User.getUsers = function(username, callback) {
+	request(rest_api.get_all_users, {json:true}, function(err,res,body){
+		if (err){
+			callback(err,null);
+			return;
+		}
+		if (res.statusCode == 200) {
+			var users = body.map(function(item, idx, arr){
+		        return new User(item.userName, item.status);
+		      });
+
+		      users.sort(function(a,b) {
+		        return a.userName > b.userName;
+		      });
+		      
+		      callback(null, users);
+		}
+	})
+}
+
 User.getAllUsers = function(callback) {
   request(rest_api.get_all_users, {json:true}, function(err, res, body) {
     if (err){
