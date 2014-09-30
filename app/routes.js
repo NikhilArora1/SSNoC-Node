@@ -4,11 +4,9 @@ module.exports = function(app, _, io, participants, passport) {
   var user_controller = require('./controllers/user')(_, io, participants, passport, refreshAllUsers);
   var people_controller = require('./controllers/people')(_, io, participants, passport);
 
-  app.get("/", user_controller.getLogin);
-
-  app.post("/signup", user_controller.postSignup);
-
-  app.get("/welcome", isLoggedIn, user_controller.getWelcome);
+  app.get("/", user_controller.getJoinCommunity);
+  app.get("/joinCommunity", user_controller.getJoinCommunity);
+  app.post("/joinCommunity", user_controller.postJoinCommunity);
 
   app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
   
@@ -16,6 +14,10 @@ module.exports = function(app, _, io, participants, passport) {
   
   app.post("/status", user_controller.postPeoplePage);
 
+  // deprecated routes
+  app.post("/signup", isLoggedIn, user_controller.postSignup);
+  app.get("/welcome", isLoggedIn, user_controller.getWelcome);
+  app.get("/people", isLoggedIn, people_controller.getPeople);
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
   app.get("/logout", isLoggedIn, user_controller.getLogout);
@@ -25,10 +27,6 @@ module.exports = function(app, _, io, participants, passport) {
     failureFlash: true
   }));
 
-  app.get("/people", isLoggedIn, people_controller.getPeople);
-
-  app.get("/joinCommunity", user_controller.getJoinCommunity);
-  app.post("/joinCommunity", user_controller.postJoinCommunity);
 };
 
 function isLoggedIn(req, res, next) {

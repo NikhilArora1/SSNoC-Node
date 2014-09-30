@@ -17,7 +17,6 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     },
     
     getPeoplePage : function(req,res) {
-      
     	var user_name=req.session.passport.user.user_name;
     	User.getUsers(user_name, function(err,users) {
     		if(users!==null) {
@@ -30,8 +29,8 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
       var user_name = req.session.passport.user.user_name;
       console.log(req.body);
       Status.postStatus(user_name, req.body.statusCode, function(err, body) {
-        res.json(200, body);
-      })
+        res.redirect('/people1');
+      });
     },
     
     getSignup : function(req, res) {
