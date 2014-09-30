@@ -38,13 +38,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 
-User.getAllUsers(function(err, users) {
+User.getUsers(null, function(err, users) {
   if (!err && users !== null) {
     users.forEach(function(user) {
-      participants.all.push({userName : user.local.name});
+      participants.all.push(user);
     });
   }
-
+  console.log("participants: " + JSON.stringify(participants));
   require('./app/routes')(app, _, io, participants, passport);
   require('./app/socket')(_, io, participants);
 });

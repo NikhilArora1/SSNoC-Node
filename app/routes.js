@@ -11,6 +11,7 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
   
   app.get("/people1", isLoggedIn, user_controller.getPeoplePage);
+  app.get("/logout", isLoggedIn, user_controller.getLogout);
   
   app.post("/status", user_controller.postPeoplePage);
 
@@ -20,7 +21,6 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/people", isLoggedIn, people_controller.getPeople);
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
-  app.get("/logout", isLoggedIn, user_controller.getLogout);
   app.post("/login", passport.authenticate('local-login', {
     successRedirect : '/people',
     failureRedirect : '/',

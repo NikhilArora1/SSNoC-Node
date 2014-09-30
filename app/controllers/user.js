@@ -8,6 +8,9 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     },
 
     getLogout : function(req, res) {
+      var user_name=req.session.passport.user.user_name;
+      delete participants.online[user_name];
+      console.log("participants: " + JSON.stringify(participants));
       req.logout();
       res.redirect('/');
     },
@@ -20,7 +23,18 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     	var user_name=req.session.passport.user.user_name;
     	User.getUsers(user_name, function(err,users) {
     		if(users!==null) {
-    			res.render('people1', { users: users });
+    		  var offline = [];
+    		  var online = []
+    		  participants.all = [];
+    		  users.forEach(function(user) {
+    		    participants.all.push(user);
+            if(participants.online.hasOwnProperty(user.local.name)){
+              online.push(user.local);
+            } else {
+              offline.push(user.local); 
+            }
+          });
+    			res.render('people1', { users: users, online: online, offline: offline });
     		}
     	});
     	},
@@ -81,14 +95,15 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
           if(err)
             return next(err);
             
-          participants.all.push({'userName' : user.local.name});
-
+          participants.online[user.local.name] = user.local;
           if(user.local.new_user){
-            return res.redirect('/WelcomePage');
+            participants.all.push(user);
+            res.redirect('/WelcomePage');
           } else {
-            return res.redirect('/people1');
+            res.redirect('/people1');
           }
-          
+          console.log("participants: " + JSON.stringify(participants));
+          return;
         });
         
       })(req, res, next);

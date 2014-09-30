@@ -1,4 +1,4 @@
-<!DOCTYPE=html>
+<!DOCTYPE html>
 <html>
         <head>
                 <meta charset="UTF-8">
@@ -8,14 +8,14 @@
                 table {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
                 input[type=submit]{color:green;background-color:#F5F5F5}
                 select {color:green;background-color:#F5F5F5;}
-                form {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}
+                form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}
                 tr {font-size:1.3em;color:green}
-        td {text-align:left;width:33%}  
+                td {text-align:left;width:33%}  
                 </style>
         </head>
         <body>
-                <h3>&nbsp;<br/>&nbsp;People Directory<br/>&nbsp;</h3>
-                <form action="/status" method="post">
+                <h3>&nbsp;<br/>&nbsp;People Directory<form action="/logout" ><input type="submit" value="logout"></form></h3>
+                <form class="a" action="/status" method="post">
                         <input type="submit" >
                         <select name="statusCode">
                             <option value="GREEN">OK</option>
@@ -23,14 +23,39 @@
                             <option value="RED">Emergency</option>
                         </select>
                 </form>
+                <h3>Online</h3>
                 <div id="table">
-                        <%var dispStatus;var s;var time%>
-                    <% for(var i=0;i<users.length;i++){                  %>
-                        <%if(users[i].local.status.statusCode=="GREEN") {dispStatus="OK";s=""}%>
-                        <%if(users[i].local.status.statusCode=="YELLOW") {dispStatus="HELP";s=""}%>
-                        <%if(users[i].local.status.statusCode=="RED") {dispStatus="Emergency";s=""}%>
+                        <%var dispStatus;var s%>
+                    <% for(var i=0;i<online.length;i++){ %>
+                        <%if(online[i].status.statusCode=="GREEN") {dispStatus="OK";s="/img/green.png"}%>
+                        <%if(online[i].status.statusCode=="YELLOW") {dispStatus="HELP";s="/img/yellow.png"}%>
+                        <%if(online[i].status.statusCode=="RED") {dispStatus="Emergency";s="img/red.png"}%>
                         <table>
-                            <tr><td><%=users[i].local.name%></td><td><%=dispStatus%> &nbsp;<%=users[i].local.status.updatedAt%></td><td></td></tr>
+                                <tr>
+                                        <td><%=online[i].name%></td>
+                                        <td><img src=<%=s %> /> &nbsp;<%=dispStatus%> &nbsp;
+                                                <%if(online[i].status.updatedAt!==null){ %><%=online[i].status.updatedAt%><%}%>
+                                        </td>
+                                        <td></td>
+                                </tr>
+                        </table>
+                    <% } %>
+                </div>
+                <h3>Offline</h3>
+                <div id="table">
+                        <%var dispStatus;var s%>
+                    <% for(var i=0;i<offline.length;i++){ %>
+                        <%if(offline[i].status.statusCode=="GREEN") {dispStatus="OK";s="/img/green.png"}%>
+                        <%if(offline[i].status.statusCode=="YELLOW") {dispStatus="HELP";s="/img/yellow.png"}%>
+                        <%if(offline[i].status.statusCode=="RED") {dispStatus="Emergency";s="img/red.png"}%>
+                        <table>
+                                <tr>
+                                        <td><%=users[i].local.name%></td>
+                                        <td><img src=<%=s %> /> &nbsp;<%=dispStatus%> &nbsp;
+                                                <%if(users[i].local.status.updatedAt!==null){ %><%=users[i].local.status.updatedAt%><%}%>
+                                        </td>
+                                        <td></td>
+                                </tr>
                         </table>
                     <% } %>
                 </div>
