@@ -30,6 +30,20 @@ function validateUserNameAndPassword() {
     $('#passport_alert').remove();
     return false;
   }
+  
+  if( $('#userName').val().trim().length < 3 ){
+    $('#alert').text('Username should be at least 3 characters long.');
+    $('#alert').show();
+    $('#passport_alert').remove();
+    return false;
+  }
+  
+  if( $('#passwd').val().trim().length < 4 ){
+    $('#alert').text('Passwords should be at least 4 characters long.');
+    $('#alert').show();
+    $('#passport_alert').remove();
+    return false;
+  }
 
   return true;
 }
