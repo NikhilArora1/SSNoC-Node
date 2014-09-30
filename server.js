@@ -39,7 +39,7 @@ app.use(passport.session());
 app.use(flash());
 
 User.getAllUsers(function(err, users) {
-  if (!err) {
+  if (!err && users !== null) {
     users.forEach(function(user) {
       participants.all.push({userName : user.local.name});
     });
