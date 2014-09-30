@@ -10,7 +10,7 @@
                 select {color:green;background-color:#F5F5F5;}
                 form {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}
                 tr {font-size:1.3em;color:green}
-        td {text-align:left;width:50%}  
+        td {text-align:left;width:33%}  
                 </style>
         </head>
         <body>
@@ -24,12 +24,15 @@
                         </select>
                 </form>
                 <div id="table">
+                        <%var dispStatus;var s;var time%>
                     <% for(var i=0;i<users.length;i++){                  %>
+                        <%if(users[i].local.status.statusCode=="GREEN") {dispStatus="OK";s=""}%>
+                        <%if(users[i].local.status.statusCode=="YELLOW") {dispStatus="HELP";s=""}%>
+                        <%if(users[i].local.status.statusCode=="RED") {dispStatus="Emergency";s=""}%>
                         <table>
-                            <tr><td><%=users[i].local.name%></td><td><%=users[i].local.status%></td></tr>
+                            <tr><td><%=users[i].local.name%></td><td><%=dispStatus%> &nbsp;<%=users[i].local.status.updatedAt%></td><td></td></tr>
                         </table>
                     <% } %>
                 </div>
         </body>
 </html>
-
