@@ -1,4 +1,4 @@
-var host_url = "http://ec2-54-68-51-131.us-west-2.compute.amazonaws.com:5454/ssnoc";
+var host_url = process.env.REST_API_URL || "http://ec2-54-68-51-131.us-west-2.compute.amazonaws.com:5454/ssnoc";
 
 var RestAPI = {
   'get_all_users' : host_url + '/users',
