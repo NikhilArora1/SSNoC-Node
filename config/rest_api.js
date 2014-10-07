@@ -5,7 +5,8 @@ var RestAPI = {
   'is_password_valid' : host_url + '/user/',
   'get_user' : host_url + '/user/',
   'get_status' : host_url + '/status/userName/',
-  'post_new_user' : host_url + '/user/signup'
+  'post_new_user' : host_url + '/user/signup',
+  'get_wall_messages' : host_url + '/messages/wall'
 };
 
 RestAPI.authenticate_user = function(userName){
@@ -14,6 +15,10 @@ RestAPI.authenticate_user = function(userName){
 
 RestAPI.post_status = function(userName){
   return host_url + '/status/' + userName; 
+}
+
+RestAPI.post_wall_message = function(userName){
+	return host_url + '/message/' + userName;
 }
 
 module.exports = RestAPI;

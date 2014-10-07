@@ -42,7 +42,8 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     postPeoplePage : function(req,res) {
       var user_name = req.session.passport.user.user_name;
       console.log(req.body);
-      Status.postStatus(user_name, req.body.statusCode, function(err, body) {
+      // this is a fixed timestamp for now, will update later
+      Status.postStatus(user_name, req.body.statusCode, "2014-10-04 10:05:55-0700", function(err, body) {
         res.redirect('/people1');
       });
     },

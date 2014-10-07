@@ -11,6 +11,9 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/WelcomePage", isLoggedIn, user_controller.getWelcomePage);
   
   app.get("/people1", isLoggedIn, user_controller.getPeoplePage);
+  app.get("/poster", isLoggedIn, function(req, res){
+    res.render("poster");
+  });
   app.get("/logout", isLoggedIn, user_controller.getLogout);
   
   app.post("/status", user_controller.postPeoplePage);
