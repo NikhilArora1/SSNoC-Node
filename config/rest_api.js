@@ -21,4 +21,20 @@ RestAPI.post_wall_message = function(userName){
 	return host_url + '/message/' + userName;
 }
 
+RestAPI.send_chat_message = function(sendinguserName, receivinguserName){
+	return host_url + '/message/' + sendinguserName + '/' + receivinguserName;
+}
+
+RestAPI.get_chat_messages = function(Username1, Username2){
+	return host_url + '/messages/' + Username1 + '/' + Username2;
+}
+
+RestAPI.get_users = function(userName){
+	return host_url + '/users/' + userName + '/chatbuddies' ;
+}
+
+RestAPI.retrieve_message = function(messageID){
+	return host_url + '/message/' + messageID;
+}
+
 module.exports = RestAPI;

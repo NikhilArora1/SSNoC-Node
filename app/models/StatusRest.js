@@ -1,7 +1,7 @@
 var bcrypt = require('bcrypt-nodejs');
 var request = require('request');
 var rest_api = require('../../config/rest_api');
-var util = require('../util')
+var util = require('../util');
 
 function Status(username, status, updatedAt){
   this.username = username;

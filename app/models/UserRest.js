@@ -1,7 +1,8 @@
 var bcrypt = require('bcrypt-nodejs');
 var request = require('request');
 var rest_api = require('../../config/rest_api');
-var util = require('../util')
+var util = require('../util');
+var Status = require('./StatusRest');
 
 function User(user_name, password, latest_status, new_user){
   this.local = {
@@ -16,12 +17,6 @@ function User(user_name, password, latest_status, new_user){
   this.getStatus = function(){
     return this.local.status;
   };
-}
-
-function Status(statusCode, updatedAt, location){
-    this.statusCode = statusCode;
-    this.updatedAt = updatedAt;
-    this.location = location;
 }
 
 
@@ -52,9 +47,9 @@ User.getUser = function(user_name, callback) {
       var lastStatusCode = body.lastStatusCode;
       var new_status = null;
 			if(lastStatusCode != null){
-			   new_status = new Status(lastStatusCode.statusCode, lastStatusCode.updatedAt, null);
+			   new_status = new Status(body.userName, lastStatusCode.status, lastStatusCode.updatedAt);
 			 } else {
-  			 new_status = new Status("GREEN", null, null);
+  			 new_status = new Status(body.userName, "GREEN", null);
   		}
       var user = new User(body.userName, body.password, new_status, false);
       callback(null, user);
@@ -79,9 +74,9 @@ User.getUsers = function(username, callback) {
 			      var lastStatusCode = item.lastStatusCode;
 			      var new_status = null;
 			      if(lastStatusCode != null){
-			         new_status = new Status(lastStatusCode.statusCode, lastStatusCode.updatedAt, null);
+			         new_status = new Status(item.userName, lastStatusCode.status, lastStatusCode.updatedAt);
 			      } else {
-  			       new_status = new Status("GREEN", null, null);
+  			       new_status = new Status(item.userName, "GREEN", null);
   			   }
 		        return new User(item.userName, null, new_status, false);
 		      });
