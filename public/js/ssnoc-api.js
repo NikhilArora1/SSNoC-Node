@@ -27,8 +27,8 @@ function updateParticipants(participants){
     	var user = {
     		userProfileImage: '/img/photo4.png',
     		username: username,
-    		status: userObj.status.statusCode,
-    		statusIcon: getStatusIcon(userObj.status.statusCode),
+    		status: userObj.status.status,
+    		statusIcon: getStatusIcon(userObj.status.status),
     		updatedAt: userObj.status.updatedAt
     	};
 
