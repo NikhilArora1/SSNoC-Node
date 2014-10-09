@@ -18,7 +18,7 @@ function init(){
       		user = data.local;
       		$("#username").append(userName);
 
-      		socket.emit('newUser', {id: sessionId, name: name});
+      		socket.emit('newUser', {id: sessionId, name: userName});
     	});
   	});
 
