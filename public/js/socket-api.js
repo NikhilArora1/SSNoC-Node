@@ -25,8 +25,9 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		$("#messages").prepend("<p> Message | user: " + data.message.author + " date: " 
-			+ data.message.postedAt + " content: " + data.message.content + " | </p>");
+		var $div = $("<div>").loadTemplate($("#wall_message_template"),data.message);
+		$("#messages").prepend($div);
+
 	});
 
 	socket.on('newStatusMessage', function(data){
@@ -40,6 +41,8 @@ function init(){
 		}
 		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
 		$("#messages").prepend($div);
+		
+
 		//$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
 		//	+ " status: " + data.status.status + " | </p>");
 	});
