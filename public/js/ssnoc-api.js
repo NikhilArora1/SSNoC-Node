@@ -14,12 +14,16 @@ function updateParticipants(participants){
 	$('#onlineUsers').html('');
     $('#offlineUsers').html('');
     var map = {};
+    var userName = '';
+    var userEle = '';
     for (var sId in participants.online){
       userName = participants.online[sId].userName;
       if (map[userName] == undefined || map[userName] !== sessionId){
         map[userName] = {sId:sId};
       }
     }
+    keys = Object.keys(map);
+    keys.sort();
 
     participants.all.forEach(function(userObj){
     	var username = userObj.name;
@@ -42,7 +46,5 @@ function updateParticipants(participants){
 
     	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
     	$target.append($div);
-
     });
-
 }
