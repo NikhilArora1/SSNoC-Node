@@ -17,7 +17,17 @@ function init(){
       		userName = data.local.name;
       		user = data.local;
       		$("#username").append(userName);
+
+      		socket.emit('newUser', {id: sessionId, name: name});
     	});
+  	});
+
+  	socket.on('newConnection', function (data) {
+    	updateParticipants(data.participants);
+  	});
+
+  	socket.on('userDisconnected', function(data) {
+    	updateParticipants(data.participants);
   	});
 
   	socket.on('error', function (reason) {
@@ -31,14 +41,7 @@ function init(){
 	});
 
 	socket.on('newStatusMessage', function(data){
-		var status = data.status.status;
-		if(status == "GREEN"){
-			data.status.statusIcon = "/img/green.png";
-		} else if(status == "RED"){
-			data.status.statusIcon = "/img/red.png";
-		} else if(status == "YELLOW"){
-			data.status.statusIcon = "/img/yellow.png";
-		}
+		data.status.statusIcon = getStatusIcon(data.status.status);
 		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
 		$("#messages").prepend($div);
 		
