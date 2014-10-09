@@ -8,9 +8,6 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
     },
 
     getLogout : function(req, res) {
-      var user_name=req.session.passport.user.user_name;
-      delete participants.online[user_name];
-      console.log("participants: " + JSON.stringify(participants));
       req.logout();
       res.redirect('/');
     },
@@ -96,12 +93,11 @@ module.exports = function(_, io, participants, passport, refreshAllUsers) {
           if(err)
             return next(err);
             
-          participants.online[user.local.name] = user.local;
           if(user.local.new_user){
-            participants.all.push(user);
+            participants.all.push(user.local.name);
             res.redirect('/WelcomePage');
           } else {
-            res.redirect('/people1');
+            res.redirect('/home');
           }
           console.log("participants: " + JSON.stringify(participants));
           return;

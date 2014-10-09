@@ -41,7 +41,7 @@ app.use(flash());
 User.getUsers(null, function(err, users) {
   if (!err && users !== null) {
     users.forEach(function(user) {
-      participants.all.push(user);
+      participants.all.push(user.local);
     });
   }
   console.log("participants: " + JSON.stringify(participants));
