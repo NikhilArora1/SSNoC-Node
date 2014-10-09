@@ -15,6 +15,9 @@ module.exports = function(app, _, io, participants, passport) {
     res.render("poster");
   });
   app.get("/logout", isLoggedIn, user_controller.getLogout);
+  app.get("/publicWall", isLoggedIn, function(req, res){
+    res.render("publicWall");
+  });
   
   app.post("/status", user_controller.postPeoplePage);
 

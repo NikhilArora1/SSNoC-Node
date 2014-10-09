@@ -2,10 +2,12 @@
 <html>
 	<head>
 		<title>Poster!!</title>
-		<script text="type/javascript" src="/js/socket.io.min.js"></script>
-		<script text="type/javascript" src="/js/jquery-1.9.1.min.js"></script>
-		<script text="type/javascript" src="/js/date.js"></script>
-		<script text="type/javascript" src="/js/socket-api.js"></script>
+		<script type="text/javascript" src="/js/socket.io.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
+		<script type="text/javascript" src="/js/date.js"></script>
+		<script type="text/javascript" src="/js/socket-api.js"></script>
+		<link rel="stylesheet" href="/css/ssnoc.css"/>
 	</head>
 	<body>
 		<input id="wallMessage" type="text" name="message"/>
@@ -14,5 +16,16 @@
 		<button id="submitStatus">Submit Status</button>
 		<div id="messages">
 		</div>
+		<script type="text/html" id="wall_status_template">
+            <div class="message">
+                <h5 class="username" data-content="username"></h5>
+                <span class="timestamp" data-content="updatedAt"></span>
+                <p class="status">
+                    Status:
+                    <span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
+                    <img data-src="statusIcon"/>
+                </p>
+            </div>
+        </script>
 	</body>
 </html>

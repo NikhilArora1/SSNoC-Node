@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <meta charset="UTF-8">
+            <title>PeopleDirectory</title>
+                 <!--<link rel='stylesheet' href='/css/style.css'/>-->
+            <style type="text/css">
+        		@media all and (min-width:480px) {
+                        	h3.head {font-size:30px}
+                        	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+                        	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+                        	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+                        	input[type=submit]{color:green;background-color:#F5F5F5}
+                        	select {color:green;background-color:#F5F5F5;}
+        					form.message {color:green;background-color:#F5F5F5;}
+                        	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+                        	tr {font-size:1.1em;color:green}
+                        	td {text-align:left;width:33%}  
+                        	td.a {text-align:right;width:10%}
+        			img.usr {max-height:12%;}
+        		}
+        		@media all and (max-width:480px){
+        			h3.head {font-size:30px}
+                        	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+                        	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+                        	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+                        	input[type=submit]{color:green;background-color:#F5F5F5;font-size:20px;width:100px;height:40px}
+                        	select {color:green;background-color:#F5F5F5;width:100px;height:40px;font-size:20px}
+                        	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+                        	tr {font-size:1.1em;color:green}
+                        	td {text-align:left;width:33%}  
+                        	td.a {text-align:right;}
+        			img.usr {height:10%;}
+        	
+        		}
+            </style>
+    		<script>
+    			function goToPage(select){
+    				b=select.options[select.selectedIndex].value
+    				parent.location=b
+
+    			}
+    		</script>
+            <script type="text/javascript" src="/js/socket.io.min.js"></script>
+            <script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
+            <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+            <script type="text/javascript" src="/js/socket-api.js"></script>
+        </head>
+        <body>
+                <table class="head">
+                        <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                        <tr><td>
+                        	<form>
+                        		<select onchange="goToPage(this);">
+                        			<option value="publicWall.ejs">Public Wall</option>
+                        			<option value="people1.ejs">People Directory</option>
+                        		
+                        		</select>
+                        	</form>
+                        </td></tr>
+                </table>
+                <table class="head">
+                <tr>
+                <td>
+                        	<form>
+                        		<select onchange="goToPage(this);">
+                        			<option value="publicWall.ejs">Public Wall</option>
+                        			<option value="people1.ejs">People Directory</option>
+                        		
+                        		</select>
+                </td>
+                </tr>
+                </table>
+                
+				<table class="head">
+						<tr><td>
+							<form class="message">
+								<input type="text" name="message"/> <input type="submit" value="Submit">
+							</form>
+						</td></tr>
+				</table>
+            <script type="text/html" id="wall_status_template">
+                <div>
+                    <h5 class="username" data-value="username"></h5>
+                    <span class="timestamp" data-value="updatedAt"></span>
+                    <p class="status">
+                        Status:
+                        <span class="statusCode" data-value="statusCode"></span>
+                        <img data-src="statusIcon"/>
+                    </p>
+                </div>
+            </script>
+        </body>
+</html>
+
+

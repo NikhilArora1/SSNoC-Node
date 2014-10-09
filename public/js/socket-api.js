@@ -5,6 +5,7 @@ function init(){
 
   	var sessionId = '';
   	var userName =  '';
+  	var user = '';
 
   	socket.on('connect', function () {
     	sessionId = socket.socket.sessionid;
@@ -14,6 +15,8 @@ function init(){
       		dataType: 'json'
     	}).done(function(data) {
       		userName = data.local.name;
+      		user = data.local;
+      		$("#username").append(userName);
     	});
   	});
 
@@ -27,8 +30,18 @@ function init(){
 	});
 
 	socket.on('newStatusMessage', function(data){
-		$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
-			+ " status: " + data.status.status + " | </p>");
+		var status = data.status.status;
+		if(status == "GREEN"){
+			data.status.statusIcon = "/img/green.png";
+		} else if(status == "RED"){
+			data.status.statusIcon = "/img/red.png";
+		} else if(status == "YELLOW"){
+			data.status.statusIcon = "/img/yellow.png";
+		}
+		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
+		$("#messages").prepend($div);
+		//$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
+		//	+ " status: " + data.status.status + " | </p>");
 	});
 
 	$("#submitWallMessage").click(function(){
@@ -41,6 +54,18 @@ function init(){
 		var text = $("#statusMessage").val();
 		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
 		$("#statusMessage").val("");
+	});
+
+	$.addTemplateFormatter({
+		StatusFormatter : function(value, template){
+			if(value == "GREEN"){
+				return "OK";
+			} else if(value == "RED"){
+				return "Emergency";
+			} else if(value == "YELLOW"){
+				return "Help";
+			}
+		}
 	});
 }
 
