@@ -6,7 +6,7 @@ module.exports = function(app, _, io, participants, passport) {
 
   app.get("/", user_controller.getJoinCommunity);
   app.get("/home", isLoggedIn, function(req, res){
-    User.getAllUsers(null, function(err, users){
+    User.getUsers(null, function(err, users){
       if (!err && users !== null) {
         participants.all = [];
         users.forEach(function(user) {
