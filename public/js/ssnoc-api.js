@@ -32,15 +32,17 @@ function updateParticipants(participants){
     		updatedAt: userObj.status.updatedAt
     	};
 
-    	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
-
     	if(map[username] == undefined){
     		user.userOnlineIcon='/img/grey-dot.png';
-    		$('#offlineUsers').append($div);
+    		$target = $('#offlineUsers');
     	} else {
     		user.userOnlineIcon='/img/green-dot.png';
-    		$('#onlineUsers').append($div);
+    		$target = $('#onlineUsers');
     	}
+
+    	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
+    	$target.append($div);
+
     });
 
 }
