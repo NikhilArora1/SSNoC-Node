@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>SSNoC SB4</title>
+		<script type="text/javascript" src="/js/socket.io.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
+		<script type="text/javascript" src="/js/date.js"></script>
+		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
+		<script type="text/javascript" src="/js/socket-api.js"></script>
+		<link rel="stylesheet" href="/css/ssnoc.css"/>
+	</head>
+	<body>
+		<div id="header"></div>
+		<div id="pageSelector"></div>
+		<div id="content">
+			<div id="publicWall">
+			</div>
+			<div id="peopleDirectory">
+				<h2>Online Users</h2>
+				<div id="onlineUsers">
+				</div>
+				<h2>Offline Users</h2>
+				<div id="offlineUsers">
+				</div>
+			</div>
+			<div id="chatBuddies">
+			</div>
+		</div>
+		<script type="text/html" id="people_directory_template">
+            <div class="directory_person">
+            	<img class="userProfileImage" data-src="userProfileImage"/>
+                <h5 class="username" data-content="username"></h5>
+                <img class="userOnlineIcon" data-src="userOnlineIcon"/>
+                <p class="userStatus">Status:
+                	<span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
+                    <img data-src="statusIcon"/>
+                </p>
+                <p class="userStatusUpdateTime">Updated: 
+                <span class="timestamp" data-content="updatedAt"></span>
+                </p>
+            </div>
+        </script>
+	</body>
+</html>

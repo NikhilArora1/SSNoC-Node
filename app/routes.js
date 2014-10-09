@@ -5,6 +5,19 @@ module.exports = function(app, _, io, participants, passport) {
   var people_controller = require('./controllers/people')(_, io, participants, passport);
 
   app.get("/", user_controller.getJoinCommunity);
+  app.get("/home", isLoggedIn, function(req, res){
+    User.getUsers(null, function(err, users){
+      if (!err && users !== null) {
+        participants.all = [];
+        users.forEach(function(user) {
+          participants.all.push(user.local);
+        });
+        res.render("home");
+      } else {
+        res.redirect("/home");
+      }
+    });
+  });
   app.get("/joinCommunity", user_controller.getJoinCommunity);
   app.post("/joinCommunity", user_controller.postJoinCommunity);
 
@@ -15,6 +28,9 @@ module.exports = function(app, _, io, participants, passport) {
     res.render("poster");
   });
   app.get("/logout", isLoggedIn, user_controller.getLogout);
+  app.get("/publicWall", isLoggedIn, function(req, res){
+    res.render("publicWall");
+  });
   
   app.post("/status", user_controller.postPeoplePage);
 

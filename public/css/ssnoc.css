@@ -1,0 +1,17 @@
+.username {
+	font-size: 20px;
+	color: #00ff00;
+	display: inline;
+}
+
+.timestamp {
+	display: inline;
+}
+
+.status {
+	clear: both;
+}
+
+.message {
+	border: 1px solid #000000;
+}
