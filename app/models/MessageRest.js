@@ -49,6 +49,9 @@ Message.getWallMessages=function(callback){
             var messages = body.map(function(item, idx, arr){
                 return new Message(item.author, null, item.content, item.postedAt);
             });
+            messages.sort(function(a,b) {
+                return a.postedAt > b.postedAt;
+            });
             callback(null, messages);
             return;
         }

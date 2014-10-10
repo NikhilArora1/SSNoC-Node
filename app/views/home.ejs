@@ -15,11 +15,13 @@
 				if(content==="publicWall"){
 					$("#peopleDirectory").hide();
 					$("#chatBuddies").hide();
+					refreshPublicWall();
 					$("#publicWall").show();
 				}
 				if(content==="peopleDirectory"){
 					$("#publicWall").hide();
 					$("#chatBuddies").hide();
+					refreshPeopleDirectory();
 					$("#peopleDirectory").show();
 				}
 				if(content==="privateChat"){

@@ -48,3 +48,38 @@ function updateParticipants(participants){
     	$target.append($div);
     });
 }
+
+function refreshPeopleDirectory(){
+    $.ajax({
+            url:  '/participants',
+            type: 'GET',
+            dataType: 'json'
+        }).done(function(data) {
+            updateParticipants(data);
+        });
+}
+
+function refreshPublicWall(){
+    $.ajax({
+            url:  '/wall',
+            type: 'GET',
+            dataType: 'json'
+        }).done(function(data) {
+            var wall = $("#messages");
+            wall.html('');
+            data.forEach(function(message){
+                addNewWallMessage(wall, {message: message});
+            })
+        });
+}
+
+function addNewWallMessage(wall, data){
+    var $div = $("<div>").loadTemplate($("#wall_message_template"), data.message);
+    wall.prepend($div);
+}
+
+function addNewStatusMessage(wall, data){
+    data.status.statusIcon = getStatusIcon(data.status.status);
+    var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
+    wall.prepend($div);
+}

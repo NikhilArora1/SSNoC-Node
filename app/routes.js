@@ -3,6 +3,7 @@ var User = require('./models/UserRest');
 module.exports = function(app, _, io, participants, passport) {
   var user_controller = require('./controllers/user')(_, io, participants, passport, refreshAllUsers);
   var people_controller = require('./controllers/people')(_, io, participants, passport);
+  var messages_controller = require('./controllers/messages')(_, io, participants, passport);
 
   app.get("/", user_controller.getJoinCommunity);
   app.get("/home", isLoggedIn, function(req, res){
@@ -34,11 +35,17 @@ module.exports = function(app, _, io, participants, passport) {
   
   app.post("/status", user_controller.postPeoplePage);
 
+  // data routes
+  app.get("/user", isLoggedIn, user_controller.getUser);
+  app.get("/wall", isLoggedIn, messages_controller.getWallMessages);
+  app.get("/participants", isLoggedIn, function(req, res){
+    res.json(200, participants);
+  });
+
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
   app.get("/welcome", isLoggedIn, user_controller.getWelcome);
   app.get("/people", isLoggedIn, people_controller.getPeople);
-  app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
   app.post("/login", passport.authenticate('local-login', {
     successRedirect : '/people',

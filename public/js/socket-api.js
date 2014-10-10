@@ -35,19 +35,12 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		var $div = $("<div>").loadTemplate($("#wall_message_template"),data.message);
-		$("#messages").prepend($div);
-
+		addNewWallMessage($("#messages"), data);
 	});
 
 	socket.on('newStatusMessage', function(data){
-		data.status.statusIcon = getStatusIcon(data.status.status);
-		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
-		$("#messages").prepend($div);
-		
-
-		//$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
-		//	+ " status: " + data.status.status + " | </p>");
+		addNewStatusMessage($("#messages", data));
+		refreshPeopleDirectory();
 	});
 
 	$("#submitWallMessage").click(function(){
