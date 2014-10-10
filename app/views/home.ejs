@@ -27,6 +27,7 @@
 				if(content==="privateChat"){
 					$("#publicWall").hide();
 					$("#peopleDirectory").hide();
+					refreshChatBuddies();
 					$("#chatBuddies").show();
 				}
 			}
@@ -92,6 +93,12 @@
                 <p class="messageText" data-content="content" ></span>
                 </p>
 			</div>
+        </script>
+        <script type="text/html" id="chat_buddy_user">
+        	<div class="chatBuddy">
+        		<h5 class="username" data-content="username"></h5>
+    			<img class="userOnlineIcon" data-src="userOnlineIcon"/>
+        	</div>
         </script>
 	</body>
 </html>

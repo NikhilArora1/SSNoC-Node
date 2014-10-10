@@ -7,9 +7,19 @@ module.exports = function(_, io, participants, passport) {
     		if(err === null){
     			res.json(200, messages);
     		} else {
-    			res.send(500);
+    			res.status(500).send('Server Error: ' + err);
     		}
     	});
     },
+    getChatBuddies : function(req, res){
+        var user_name=req.session.passport.user.user_name;
+        MessageRest.getChatBuddies(user_name, function(err, buddies){
+            if(err === null){
+                res.json(200, buddies);
+            } else {
+                res.status(500).send('Server Error: ' + err);
+            }
+        });
+    }
   };
 };

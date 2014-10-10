@@ -1,3 +1,5 @@
+var onlineUsers = '';
+
 function getStatusIcon(status){
 	var icon = '';
 	if(status == "GREEN"){
@@ -47,6 +49,8 @@ function updateParticipants(participants){
     	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
     	$target.append($div);
     });
+
+    onlineUsers = map;
 }
 
 function refreshPeopleDirectory(){
@@ -73,6 +77,21 @@ function refreshPublicWall(){
         });
 }
 
+function refreshChatBuddies(){
+    $.ajax({
+        url: '/chatBuddies',
+        type: 'GET',
+        dataType: 'json'
+    }).done(function(data){
+        $buddies = $("#chatBuddies");
+        $buddies.html('');
+        data.forEach(function(user){
+            $div = createChatBuddyCell(user);
+            $buddies.append($div);
+        });
+    });
+}
+
 function addNewWallMessage(wall, data){
     var $div = $("<div>").loadTemplate($("#wall_message_template"), data.message);
     wall.prepend($div);
@@ -83,3 +102,23 @@ function addNewStatusMessage(wall, data){
     var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
     wall.prepend($div);
 }
+
+function createChatBuddyCell(user){
+    var name = user.local.name;
+    var icon = '';
+    if(onlineUsers[name] == undefined){
+        icon='/img/grey-dot.png';
+    } else {
+        icon='/img/green-dot.png';
+    }
+
+    var $div = $("<div>").loadTemplate($("#chat_buddy_user"), {
+        username: user.local.name,
+        userOnlineIcon: icon
+    });
+
+    $div.click()
+
+    return $div;
+}
+

@@ -41,6 +41,7 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/participants", isLoggedIn, function(req, res){
     res.json(200, participants);
   });
+  app.get("/chatBuddies", isLoggedIn, messages_controller.getChatBuddies);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
