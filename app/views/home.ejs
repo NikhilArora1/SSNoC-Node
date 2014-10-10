@@ -8,6 +8,26 @@
 		<script type="text/javascript" src="/js/date.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
+		<script>
+			$.ajax({
+	      		url:  '/user',
+	      		type: 'GET',
+	      		dataType: 'json'
+	    	}).done(function(data) {
+	    		console.log(JSON.stringify(data)); //for test
+	      		statusCode= data.local.status.status;
+	      		console.log(JSON.stringify(statusCode));
+	      		selObj=document.getElementById("selectStatus");
+		    	statuses=["GREEN","YELLOW","RED"];	
+		    	displayStatuses=["OK","Help","Emergency"];
+		    	htmlStr="";
+		    	for(i=0;i<statuses.length;i++){
+		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+		    	}
+		    	selObj.innerHTML=htmlStr;
+	      	});	
+		</script>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
 		<script type="text/javascript">
 			function selectPage(selObj){
@@ -37,7 +57,13 @@
                         <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
                         <tr>
                         	<td>
-                        		
+                        		<select id="selectStatus">	
+                        			<!--
+                        			<option value="GREEN" >OK</option>
+                        			<option value="YELLOW" >Help</option>
+                        			<option value="RED" >Emergency</option>
+                        			-->
+                        		</select>
                         	</td>
                         </tr>
             </table>
@@ -90,6 +116,17 @@
                 <p class="messageText" data-content="content" ></span>
                 </p>
 			</div>
+        </script>
+        <script type="text/html" id="wall_status_template">
+            <div class="message">
+                <h5 class="username" data-content="username"></h5>
+                <span class="timestamp" data-content="updatedAt"></span>
+                <p class="status">
+                    Status:
+                    <span class="statusCode" data-content="status" data-format="StatusFormatter">something something</span>
+                    <img data-src="statusIcon"/>
+                </p>
+            </div>
         </script>
 	</body>
 </html>
