@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<script type="text/javascript" src="/js/socket.io.min.js"></script>
+	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+	<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
+	<script type="text/javascript" src="/js/date.js"></script>
+	<script type="text/javascript" src="/js/ssnoc-api.js"></script>
+	<script type="text/javascript" src="/js/socket-api.js"></script>
+	<link rel="stylesheet" href="/css/ssnoc.css"/>
+	<script type="text/javascript">
+		var chatBuddy = <%-JSON.stringify(buddyName)%>;
+		$(document).ready(function(){
+			console.log("starting chat with: " + chatBuddy);
+			$("#header").append(": " + chatBuddy);
+
+			// query the existing messages between two users
+			$.ajax({
+        		url: '/privateMessages?buddy=' + chatBuddy,
+        		type: 'GET',
+        		dataType: 'json'
+		    }).done(function(data){
+		        data.forEach(function(message){
+		            insertChatMessage(message);
+		        });
+		    });
+
+		});
+	</script>
+	<style>
+    	html, body { height:100%; }
+    	#messages {
+    		height:50%;
+    		width:100%;
+    		border: 1px solid black;
+    	}
+    	#messageEntry {
+    		width:100%;
+    		float: bottom;
+    	}
+    	input#messageInput {
+    		width: 90%;
+    	}
+  </style>
+</head>
+<body>
+	<h2 id="header">Private Chat</h2>
+	<div id="chatMessages">
+	</div>
+	<div id="messageEntry">
+		<input type="text" id="privateChatInput"/>
+		<button id="privateChatSubmit">Send</button>
+	</div>
+	<script type="text/html" id="message_template">
+		<div class="message">
+			<h4 class="username" data-content="username"></h4>
+			<p class="timestamp" data-content="timestamp"></p>
+			<p class="message_text" data-content="message"></p>
+		</div>
+	</script>
+</body>
+</html>

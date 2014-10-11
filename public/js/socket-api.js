@@ -21,6 +21,9 @@ function init(){
       		$("#username").append(userName);
 
       		socket.emit('newUser', {id: sessionId, name: userName});
+
+      		// join this user's message room
+      		socket.join(userName);
     	});
   	});
 
@@ -55,6 +58,19 @@ function init(){
 		var text = $("#selectStatus").val();
 		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
 		$("#statusMessage").val("");
+	});
+
+	socket.on('newPrivateMessage', function(data){
+		console.log("private message received... " + JSON.stringify(data));
+		onNewPrivateMessage(data.message);
+	});
+
+	$("#privateChatSubmit").click(function(){
+		var text = $("#privateChatInput").val();
+		var user = userName;
+		var buddy = chatBuddy;
+		console.log("send private message: " + user + " / " + buddy + " / " + text);
+		socket.emit('sendPrivateMessage', {author: user, target: buddy, message: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
 	});
 
 	$.addTemplateFormatter({

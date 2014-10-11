@@ -117,8 +117,34 @@ function createChatBuddyCell(user){
         userOnlineIcon: icon
     });
 
-    $div.click()
+    $div.click(function(){
+        var url = "/privateChat?name=" + name;
+        console.log('starting chat with ' + url);
+        window.location = url;
+        //window.location.assign(url)
+    });
 
     return $div;
+}
+
+function onNewPrivateMessage(message){
+    if(chatBuddy === message.author || chatBuddy === message.target){
+        insertChatMessage(message);
+    } else {
+        notifyNewMessage(message);
+    }
+}
+
+function insertChatMessage(chatMessage){
+    var $div = $("<div>").loadTemplate($("#message_template"), {
+        username: chatMessage.author,
+        timestamp: chatMessage.postedAt,
+        message: chatMessage.content
+    });
+    $("#chatMessages").append($div);
+}
+
+function notifyNewMessage(chatMessage){
+
 }
 

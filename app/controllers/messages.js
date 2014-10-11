@@ -20,6 +20,17 @@ module.exports = function(_, io, participants, passport) {
                 res.status(500).send('Server Error: ' + err);
             }
         });
+    },
+    getPrivateMessages : function(req, res){
+        var user_name=req.session.passport.user.user_name;
+        var buddy=req.query.buddy;
+        MessageRest.getChatMessages(user_name, buddy, function(err, messages){
+            if(err === null){
+                res.json(200, messages);
+            } else {
+                res.send("error: " + err);
+            }
+        });
     }
   };
 };

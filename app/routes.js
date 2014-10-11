@@ -32,6 +32,10 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/publicWall", isLoggedIn, function(req, res){
     res.render("publicWall");
   });
+  app.get("/privateChat", isLoggedIn, function(req, res){
+    console.log("private chat with: " + req.query.name);
+    res.render("privateChat", {buddyName: req.query.name});
+  });
   
   app.post("/status", user_controller.postPeoplePage);
 
@@ -42,6 +46,7 @@ module.exports = function(app, _, io, participants, passport) {
     res.json(200, participants);
   });
   app.get("/chatBuddies", isLoggedIn, messages_controller.getChatBuddies);
+  app.get("/privateMessages", isLoggedIn, messages_controller.getPrivateMessages);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
