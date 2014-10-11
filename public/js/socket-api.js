@@ -21,9 +21,6 @@ function init(){
       		$("#username").append(userName);
 
       		socket.emit('newUser', {id: sessionId, name: userName});
-
-      		// join this user's message room
-      		socket.join(userName);
     	});
   	});
 
@@ -44,7 +41,8 @@ function init(){
 	});
 
 	socket.on('newStatusMessage', function(data){
-		addNewStatusMessage($("#messages", data));
+		console.log("new status message: " + JSON.stringify(data) );
+		addNewStatusMessage($("#messages"), data);
 		refreshPeopleDirectory();
 	});
 

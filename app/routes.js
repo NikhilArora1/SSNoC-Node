@@ -43,7 +43,15 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/user", isLoggedIn, user_controller.getUser);
   app.get("/wall", isLoggedIn, messages_controller.getWallMessages);
   app.get("/participants", isLoggedIn, function(req, res){
-    res.json(200, participants);
+    User.getUsers(null, function(err, users){
+      if (!err && users !== null) {
+        participants.all = [];
+        users.forEach(function(user) {
+          participants.all.push(user.local);
+        });
+      }
+      res.json(200, participants);
+    });
   });
   app.get("/chatBuddies", isLoggedIn, messages_controller.getChatBuddies);
   app.get("/privateMessages", isLoggedIn, messages_controller.getPrivateMessages);
