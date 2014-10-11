@@ -47,6 +47,9 @@ function updateParticipants(participants){
     	}
 
     	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
+        $div.find("#launchPrivateChat").click(function(){
+            startPrivateChat(username);
+        });
     	$target.append($div);
     });
 
@@ -118,13 +121,16 @@ function createChatBuddyCell(user){
     });
 
     $div.click(function(){
-        var url = "/privateChat?name=" + name;
-        console.log('starting chat with ' + url);
-        window.location = url;
-        //window.location.assign(url)
+        startPrivateChat(name);
     });
 
     return $div;
+}
+
+function startPrivateChat(user){
+    var url = "/privateChat?name=" + user;
+    console.log('starting chat with ' + url);
+    window.location = url;
 }
 
 function onNewPrivateMessage(message){
