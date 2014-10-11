@@ -14,8 +14,10 @@ function init(){
       		type: 'GET',
       		dataType: 'json'
     	}).done(function(data) {
+    		console.log(JSON.stringify(data)); //for test
       		userName = data.local.name;
       		user = data.local;
+      		console.log(JSON.stringify(user));   //for test
       		$("#username").append(userName);
 
       		socket.emit('newUser', {id: sessionId, name: userName});
@@ -35,14 +37,17 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		$("#messages").prepend("<p> Message | user: " + data.message.author + " date: " 
-			+ data.message.postedAt + " content: " + data.message.content + " | </p>");
+		var $div = $("<div>").loadTemplate($("#wall_message_template"),data.message);
+		$("#messages").prepend($div);
+
 	});
 
 	socket.on('newStatusMessage', function(data){
 		data.status.statusIcon = getStatusIcon(data.status.status);
 		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
 		$("#messages").prepend($div);
+		
+
 		//$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
 		//	+ " status: " + data.status.status + " | </p>");
 	});
@@ -53,8 +58,8 @@ function init(){
 		$("#wallMessage").val("");
 	});
 
-	$("#submitStatus").click(function(){
-		var text = $("#statusMessage").val();
+	$("#selectStatus").change(function(){
+		var text = $("#selectStatus").val();
 		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
 		$("#statusMessage").val("");
 	});

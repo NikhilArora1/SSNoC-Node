@@ -17,6 +17,7 @@
 		<button id="submitStatus">Submit Status</button>
 		<div id="messages">
 		</div>
+		
 		<script type="text/html" id="wall_status_template">
             <div class="message">
                 <h5 class="username" data-content="username"></h5>
@@ -28,5 +29,17 @@
                 </p>
             </div>
         </script>
+        
+        <script type="text/html" id="wall_message_template">
+            <div class="message">
+                <h5 class="username" data-content="author"></h5>
+                <span class="timestamp" data-content="postedAt"></span>
+                <p class="messageText" data-content="content" ></span>
+                </p>
+			</div>
+        </script>
+        
+        
+        
 	</body>
 </html>

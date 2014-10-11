@@ -117,9 +117,9 @@ Message.getChatBuddies=function(username, callback){
 	        	 var lastStatusCode = item.lastStatusCode;
 			      var new_status = null;
 			      if(lastStatusCode != null){
-			         new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt, null);
+			         new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
 			      } else {
-			       new_status = new Status("GREEN", null, null);
+			       new_status = new Status(item.userName, "GREEN", null);
 			   }
 		        return new User(item.userName, null, new_status, false);
             });

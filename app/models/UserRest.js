@@ -47,7 +47,7 @@ User.getUser = function(user_name, callback) {
       var lastStatusCode = body.lastStatusCode;
       var new_status = null;
 			if(lastStatusCode != null){
-			   new_status = new Status(body.userName, lastStatusCode.status, lastStatusCode.updatedAt);
+			   new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
 			 } else {
   			 new_status = new Status(body.userName, "GREEN", null);
   		}
@@ -74,7 +74,7 @@ User.getUsers = function(username, callback) {
 			      var lastStatusCode = item.lastStatusCode;
 			      var new_status = null;
 			      if(lastStatusCode != null){
-			         new_status = new Status(item.userName, lastStatusCode.status, lastStatusCode.updatedAt);
+			         new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
 			      } else {
   			       new_status = new Status(item.userName, "GREEN", null);
   			   }

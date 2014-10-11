@@ -8,13 +8,83 @@
 		<script type="text/javascript" src="/js/date.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
+		<script>
+			$.ajax({
+	      		url:  '/user',
+	      		type: 'GET',
+	      		dataType: 'json'
+	    	}).done(function(data) {
+	    		console.log(JSON.stringify(data)); //for test
+	      		statusCode= data.local.status.status;
+	      		console.log(JSON.stringify(statusCode));
+	      		selObj=document.getElementById("selectStatus");
+		    	statuses=["GREEN","YELLOW","RED"];	
+		    	displayStatuses=["OK","Help","Emergency"];
+		    	htmlStr="";
+		    	for(i=0;i<statuses.length;i++){
+		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+		    	}
+		    	selObj.innerHTML=htmlStr;
+	      	});	
+		</script>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
+		<script type="text/javascript">
+			function selectPage(selObj){
+				content=selObj.options[selObj.selectedIndex].value;
+				if(content==="publicWall"){
+					$("#peopleDirectory").hide();
+					$("#chatBuddies").hide();
+					$("#publicWall").show();
+				}
+				if(content==="peopleDirectory"){
+					$("#publicWall").hide();
+					$("#chatBuddies").hide();
+					$("#peopleDirectory").show();
+				}
+				if(content==="privateChat"){
+					$("#publicWall").hide();
+					$("#peopleDirectory").hide();
+					$("#chatBuddies").show();
+				}
+			}
+		</script>
 	</head>
+
 	<body>
-		<div id="header"></div>
-		<div id="pageSelector"></div>
+		<div id="header" class="longBar">
+			<table class="head">
+                        <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                        <tr>
+                        	<td>
+                        		<select id="selectStatus">	
+                        			<!--
+                        			<option value="GREEN" >OK</option>
+                        			<option value="YELLOW" >Help</option>
+                        			<option value="RED" >Emergency</option>
+                        			-->
+                        		</select>
+                        	</td>
+                        </tr>
+            </table>
+		</div>
+		<div id="pageSelector" class="longBar">
+			<form>
+        		<select onchange="selectPage(this);">
+        			<option value="publicWall">Public Wall</option>
+        			<option value="peopleDirectory">People Directory</option>
+        			<option value="privateChat">Private Chat</option>
+        		</select>
+        	</form>
+		</div>
 		<div id="content">
 			<div id="publicWall">
+				<div id="submitMessageBar" class="longBar">
+					<input id="wallMessage" type="text" name="message"/>
+					<button id="submitWallMessage">Submit Wall Message</button>
+				</div>
+				<div id="messages">
+				</div>
 			</div>
 			<div id="peopleDirectory">
 				<h2>Online Users</h2>
@@ -28,7 +98,7 @@
 			</div>
 		</div>
 		<script type="text/html" id="people_directory_template">
-            <div class="directory_person">
+            <div class="shortBar">
             	<img class="userProfileImage" data-src="userProfileImage"/>
                 <h5 class="username" data-content="username"></h5>
                 <img class="userOnlineIcon" data-src="userOnlineIcon"/>
@@ -38,6 +108,26 @@
                 </p>
                 <p class="userStatusUpdateTime">Updated: 
                 <span class="timestamp" data-content="updatedAt"></span>
+                </p>
+                <button type="button" id="launchPrivateChat">Private Chat</button>
+            </div>
+        </script>
+        <script type="text/html" id="wall_message_template">
+            <div  class="shortBar">
+                <h5 class="username" data-content="author"></h5>
+                <span class="timestamp" data-content="postedAt"></span>
+                <p class="messageText" data-content="content" >
+                </p>
+			</div>
+        </script>
+        <script type="text/html" id="wall_status_template">
+            <div  class="shortBar">
+                <h5 class="username" data-content="username"></h5>
+                <span class="timestamp" data-content="updatedAt"></span>
+                <p class="status">
+                    Status:
+                    <span class="statusCode" data-content="status" data-format="StatusFormatter">something something</span>
+                    <img data-src="statusIcon"/>
                 </p>
             </div>
         </script>
