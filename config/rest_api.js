@@ -6,7 +6,11 @@ var RestAPI = {
   'get_user' : host_url + '/user/',
   'get_status' : host_url + '/status/userName/',
   'post_new_user' : host_url + '/user/signup',
-  'get_wall_messages' : host_url + '/messages/wall'
+  'get_wall_messages' : host_url + '/messages/wall',
+  'start_measurement' : host_url + '/memory/start',
+  'stop_measurement' : host_url + '/memory/stop',
+  'delete_memory' : host_url + '/memory',
+  'get_default_measurement' : host_url + '/memory'
 };
 
 RestAPI.authenticate_user = function(userName){
@@ -35,6 +39,10 @@ RestAPI.get_users = function(userName){
 
 RestAPI.retrieve_message = function(messageID){
 	return host_url + '/message/' + messageID;
+}
+
+RestAPI.get_interval_measurement = function(timeWindow){
+	return host_url + '/memory/interval/' + timeWindow;
 }
 
 module.exports = RestAPI;
