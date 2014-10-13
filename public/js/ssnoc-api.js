@@ -29,7 +29,6 @@ function updateParticipants(participants){
 
     participants.all.forEach(function(userObj){
     	var username = userObj.name;
-    	console.log(JSON.stringify(userObj));
     	var user = {
     		userProfileImage: '/img/photo4.png',
     		username: username,
@@ -105,7 +104,6 @@ function addNewWallMessage(wall, data){
 }
 
 function addNewStatusMessage(wall, data){
-    console.log("status data: " + JSON.stringify(data.status));
     data.status.statusIcon = getStatusIcon(data.status.status);
     var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
     wall.prepend($div);

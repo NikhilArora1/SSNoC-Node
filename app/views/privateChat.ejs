@@ -12,7 +12,7 @@
 		var chatBuddy = <%-JSON.stringify(buddyName)%>;
 		$(document).ready(function(){
 			console.log("starting chat with: " + chatBuddy);
-			$("#header").append(": " + chatBuddy);
+			$("#chatHeader").append(": " + chatBuddy);
 
 			// query the existing messages between two users
 			$.ajax({
@@ -44,7 +44,12 @@
   </style>
 </head>
 <body>
-	<h2 id="header">Private Chat</h2>
+	<div id="header" class="longBar">
+		<table class="head">
+                    <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+        </table>
+	</div>	
+	<h2 id="chatHeader">Private Chat</h2>
 	<div id="chatMessages">
 	</div>
 	<div id="messageEntry">

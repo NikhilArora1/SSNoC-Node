@@ -14,13 +14,11 @@ function init(){
       		type: 'GET',
       		dataType: 'json'
     	}).done(function(data) {
-    		console.log(JSON.stringify(data)); //for test
       		userName = data.local.name;
       		user = data.local;
-      		console.log(JSON.stringify(user));   //for test
       		$("#username").append(userName);
-
       		socket.emit('newUser', {id: sessionId, name: userName});
+      		console.log("user connected: " + userName);
     	});
   	});
 

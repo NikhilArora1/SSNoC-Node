@@ -65,6 +65,7 @@
 			$(document).ready(function(){
 				// show public wall on document load
 				showPublicWall();
+				$("#pageSelector").val("publicWall");
 			});
 		</script>
 	</head>
@@ -86,9 +87,9 @@
                         </tr>
             </table>
 		</div>
-		<div id="pageSelector" class="longBar">
+		<div class="longBar">
 			<form>
-        		<select onchange="selectPage(this);">
+        		<select id="pageSelector" onchange="selectPage(this);">
         			<option value="publicWall">Public Wall</option>
         			<option value="peopleDirectory">People Directory</option>
         			<option value="privateChat">Private Chat</option>
