@@ -16,15 +16,16 @@ function getStatusIcon(status){
 }
 
 function updateParticipants(participants){
+    $('#myUser').html('');
 	$('#onlineUsers').html('');
     $('#offlineUsers').html('');
     var map = {};
-    var userName = '';
+    var name = '';
     var userEle = '';
     for (var sId in participants.online){
-      userName = participants.online[sId].userName;
-      if (map[userName] == undefined || map[userName] !== sessionId){
-        map[userName] = {sId:sId};
+      name = participants.online[sId].userName;
+      if (map[name] == undefined || map[name] !== sessionId){
+        map[name] = {sId:sId};
       }
     }
     keys = Object.keys(map);
@@ -32,6 +33,7 @@ function updateParticipants(participants){
 
     participants.all.forEach(function(userObj){
     	var username = userObj.name;
+        var chatEnabled = true;
     	var user = {
     		userProfileImage: '/img/photo4.png',
     		username: username,
@@ -40,7 +42,11 @@ function updateParticipants(participants){
     		updatedAt: userObj.status.updatedAt
     	};
 
-    	if(map[username] == undefined){
+        if(username === userName){
+            user.userOnlineIcon='/img/green-dot.png';
+            $target = $('#myUser');
+            chatEnabled = false;
+        } else if(map[username] == undefined){
     		user.userOnlineIcon='/img/grey-dot.png';
     		$target = $('#offlineUsers');
     	} else {
@@ -49,9 +55,14 @@ function updateParticipants(participants){
     	}
 
     	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
-        $div.find("#launchPrivateChat").click(function(){
-            startPrivateChat(username);
-        });
+        if(chatEnabled){
+            $div.find("#launchPrivateChat").click(function(){
+                startPrivateChat(username);
+            });
+        } else {
+            $div.find("#launchPrivateChat").remove();
+        }
+        
     	$target.append($div);
     });
 

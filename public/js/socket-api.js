@@ -2,7 +2,6 @@ function init(){
 	var serverBaseUrl = document.domain;
 
   	var socket = io.connect(serverBaseUrl);
-
   	var sessionId = '';
 
   	socket.on('connect', function () {
