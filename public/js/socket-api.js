@@ -4,8 +4,6 @@ function init(){
   	var socket = io.connect(serverBaseUrl);
 
   	var sessionId = '';
-  	var userName =  '';
-  	var user = '';
 
   	socket.on('connect', function () {
     	sessionId = socket.socket.sessionid;
@@ -46,13 +44,13 @@ function init(){
 
 	$("#submitWallMessage").click(function(){
 		var text = $("#wallMessage").val();
-		socket.emit('postWallMessage', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
+		socket.emit('postWallMessage', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
 		$("#wallMessage").val("");
 	});
 
 	$("#selectStatus").change(function(){
 		var text = $("#selectStatus").val();
-		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
+		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
 		$("#statusMessage").val("");
 	});
 
@@ -66,7 +64,8 @@ function init(){
 		var user = userName;
 		var buddy = chatBuddy;
 		console.log("send private message: " + user + " / " + buddy + " / " + text);
-		socket.emit('sendPrivateMessage', {author: user, target: buddy, message: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
+		socket.emit('sendPrivateMessage', {author: user, target: buddy, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
+		$("#privateChatInput").val('');
 	});
 
 	$.addTemplateFormatter({

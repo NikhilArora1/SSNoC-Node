@@ -1,4 +1,7 @@
 var onlineUsers = '';
+var chatBuddy = '';
+var userName =  '';
+var user = '';
 
 function getStatusIcon(status){
 	var icon = '';
@@ -139,7 +142,7 @@ function startPrivateChat(user){
 function onNewPrivateMessage(message){
     if(chatBuddy === message.author || chatBuddy === message.target){
         insertChatMessage(message);
-    } else {
+    } else if(message.author !== userName) {
         notifyNewMessage(message);
     }
 }
@@ -154,6 +157,18 @@ function insertChatMessage(chatMessage){
 }
 
 function notifyNewMessage(chatMessage){
-
+    var content = chatMessage.content;
+    if(content.length > 20){
+        content = content.substring(0,20) + "...";
+    }
+    toastr.success("New message from " + chatMessage.author + ": " + content);
 }
 
+function initializeToastr(){
+    toastr.options.closeButton = true;
+    toastr.options.timeout = 15; // How long the toast will display without user interaction
+}
+
+$(document).ready(function(){
+    initializeToastr();
+});

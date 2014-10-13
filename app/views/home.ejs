@@ -6,6 +6,8 @@
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/js/date.js"></script>
+		<link rel="stylesheet" href="/css/toastr.min.css"/>
+		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
 		<script>
@@ -73,7 +75,7 @@
 	<body>
 		<div id="header" class="longBar">
 			<table class="head">
-                        <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                        <tr><td><h3 class="head" id="username"></h3></td><td></td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
                         <tr>
                         	<td>
                         		<select id="selectStatus">	

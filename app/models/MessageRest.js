@@ -97,6 +97,11 @@ Message.getChatMessages=function(Username1, Username2, callback){
             var messages = body.map(function(item, idx, arr){
                 return new Message(item.author, item.target, item.content, item.postedAt);
             });
+            messages.sort(function(a,b){
+                var d1 = new Date(a.postedAt);
+                var d2 = new Date(b.postedAt);
+                return d1-d2;
+            });
             callback(null, messages);
             return;
         }
