@@ -30,27 +30,42 @@
 		</script>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
 		<script type="text/javascript">
+			function showPublicWall(){
+				$("#peopleDirectory").hide();
+				$("#chatBuddies").hide();
+				refreshPublicWall();
+				$("#publicWall").show();
+			}
+
+			function showPeopleDirectory(){
+				$("#publicWall").hide();
+				$("#chatBuddies").hide();
+				refreshPeopleDirectory();
+				$("#peopleDirectory").show();
+			}
+
+			function showPrivateChat(){
+				$("#publicWall").hide();
+				$("#peopleDirectory").hide();
+				refreshChatBuddies();
+				$("#chatBuddies").show();
+			}
+
 			function selectPage(selObj){
 				content=selObj.options[selObj.selectedIndex].value;
 				if(content==="publicWall"){
-					$("#peopleDirectory").hide();
-					$("#chatBuddies").hide();
-					refreshPublicWall();
-					$("#publicWall").show();
-				}
-				if(content==="peopleDirectory"){
-					$("#publicWall").hide();
-					$("#chatBuddies").hide();
-					refreshPeopleDirectory();
-					$("#peopleDirectory").show();
-				}
-				if(content==="privateChat"){
-					$("#publicWall").hide();
-					$("#peopleDirectory").hide();
-					refreshChatBuddies();
-					$("#chatBuddies").show();
+					showPublicWall();
+				} else if(content==="peopleDirectory"){
+					showPeopleDirectory();
+				} else if(content==="privateChat"){
+					showPrivateChat();
 				}
 			}
+
+			$(document).ready(function(){
+				// show public wall on document load
+				showPublicWall();
+			});
 		</script>
 	</head>
 
