@@ -41,7 +41,7 @@ module.exports = function(app, _, io, participants, passport) {
 
   // data routes
   app.get("/user", isLoggedIn, user_controller.getUser);
-  app.get("/wall", isLoggedIn, messages_controller.getWallMessages);
+  app.get("/wall", isLoggedIn, messages_controller.getWallContents);
   app.get("/participants", isLoggedIn, function(req, res){
     User.getUsers(null, function(err, users){
       if (!err && users !== null) {

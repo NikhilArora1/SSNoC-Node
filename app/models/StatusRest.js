@@ -8,6 +8,7 @@ function Status(username, status, updatedAt){
   this.status = status;
   this.updatedAt = updatedAt;
 }
+
 Status.postStatus=function(username, status, timestamp, callback) {
     var options = {
         url : rest_api.post_status(username),
@@ -30,5 +31,29 @@ Status.postStatus=function(username, status, timestamp, callback) {
         }
     });
 };
+
+Status.getLatestStatuses=function(callback){
+    var options = {
+        url : rest_api.get_latest_statuses,
+        json: true
+    };
+    request.get(options, function(err, res, body){
+        if(err){
+            callback(err,null);
+            return;
+        } else {
+            var statuses = body.map(function(item, idx, arr){
+                return new Status(item.userName, item.statusCode, item.updatedAt);
+            });
+
+            statuses.sort(function(a,b) {
+                return a.updatedAt > b.updatedAt;
+            });
+
+            callback(null, statuses);
+            return;
+        }
+    });
+}
 
 module.exports = Status;

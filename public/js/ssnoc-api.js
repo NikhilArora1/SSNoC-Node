@@ -75,7 +75,11 @@ function refreshPublicWall(){
             var wall = $("#messages");
             wall.html('');
             data.forEach(function(message){
-                addNewWallMessage(wall, {message: message});
+                if(message.type == "MESSAGE"){
+                    addNewWallMessage(wall, {message: message});
+                } else {
+                    addNewStatusMessage(wall, {status: message});
+                }
             })
         });
 }
