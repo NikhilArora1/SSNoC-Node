@@ -33,7 +33,12 @@ module.exports = function(_, io, participants, passport) {
       var callback = function(err, data){
         res.render("MeasureMemory", {memory: data});
       };
-      MemoryRest.getDefaultMeasurement(callback);
+      console.log("time window: " + req.query.timeWindow);
+      if(req.query.timeWindow == undefined){
+        MemoryRest.getDefaultMeasurement(callback);
+      } else {
+        MemoryRest.getIntervalMeasurement(req.query.timeWindow, callback);
+      }
     }
   };
 };
