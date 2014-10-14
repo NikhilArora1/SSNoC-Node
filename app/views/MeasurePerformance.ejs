@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Measure Performance</title>
+             <!--<link rel='stylesheet' href='/css/style.css'/>-->
+            <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+            <script type="text/javascript" src="/js/socket.io.min.js"></script>
+            <script type="text/javascript">
+                function startTests(){
+                    var duration = $("#duration").val();
+                	$.ajax({
+			      		url:  '/performance/start',
+			      		type: 'POST',
+			      		dataType: 'json',
+                        data: {
+                            testDuration: duration
+                        }
+			    	}).done();	
+                }
+                function stopTests(){
+                	$.ajax({
+			      		url:  '/performance/stop',
+			      		type: 'POST',
+			      		dataType: 'json'
+			    	}).done();	
+                }
+            </script>
+            <script type="text/javascript">
+            	$(document).ready(function(){
+            		var serverBaseUrl = document.domain;
+  					var socket = io.connect(serverBaseUrl);
+					socket.on('measurePerformanceEnded', function (data) {
+					    alert("Status: " + data.message 
+                            + "\nGet Requests Per Second: " + data.getRequestsPerSecond
+					    	+ "\nPost Requests Per Second: " + data.postRequestsPerSecond
+					    	+ "\nElapsed Time: " + data.elapsedTime);
+					});
+            	});
+            </script>
+        </head>
+        <body>
+			<!--this will not show-->
+            <table class="head">
+                    <tr><td><h3 class="head">&nbsp;Measure Performance</h3></td>
+                    <td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+            </table>
+           	<table class="head"> 
+				<tr>
+					<td>
+						<input type="number" id="duration" min="0"/>
+						<button type="button" onclick="startTests()">Start</button>
+						<button type="button" onclick="stopTests()">Stop</button>
+					</td>
+				</tr>
+			</table>
+		</body>
+</html>

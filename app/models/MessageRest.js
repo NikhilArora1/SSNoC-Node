@@ -26,7 +26,7 @@ Message.postWallMessage=function(username, message, timestamp, callback) {
         }
         else
         {
-            console.log(body);
+            //console.log(body);
             var message = new Message(body.author, null, body.content, body.postedAt);
             callback(null, message);
             return;
@@ -45,7 +45,7 @@ Message.getWallMessages=function(callback){
             return;
         }
         else {
-            console.log(body);
+            //console.log(body);
             var messages = body.map(function(item, idx, arr){
                 return new Message(item.author, null, item.content, item.postedAt);
             });

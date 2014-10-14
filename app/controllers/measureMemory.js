@@ -31,7 +31,7 @@ module.exports = function(_, io, participants, passport) {
     },
     getMemoryProfile: function(req, res){
       var callback = function(err, data){
-        res.render("MeasureMemory", {memory: data});
+        res.render("MeasureMemory", {memory: data, timeWindow: req.query.timeWindow});
       };
       console.log("time window: " + req.query.timeWindow);
       if(req.query.timeWindow == undefined){

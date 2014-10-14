@@ -11,7 +11,9 @@ var RestAPI = {
   'stop_measurement' : host_url + '/memory/stop',
   'delete_memory' : host_url + '/memory',
   'get_default_measurement' : host_url + '/memory',
-  'get_latest_statuses' : host_url + '/statuscrumbs'
+  'get_latest_statuses' : host_url + '/statuscrumbs',
+  'setup_performance' : host_url + '/performance/setup',
+  'teardown_performance' : host_url + '/performance/teardown'
 };
 
 RestAPI.authenticate_user = function(userName){
