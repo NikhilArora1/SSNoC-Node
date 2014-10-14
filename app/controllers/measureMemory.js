@@ -31,8 +31,9 @@ module.exports = function(_, io, participants, passport) {
     },
     getMemoryProfile: function(req, res){
       var callback = function(err, data){
-        
+        res.render("MeasureMemory", {memory: data});
       };
+      MemoryRest.getDefaultMeasurement(callback);
     }
   };
 };

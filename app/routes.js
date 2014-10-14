@@ -58,10 +58,10 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/privateMessages", isLoggedIn, messages_controller.getPrivateMessages);
 
   // measure memory routes
-  app.post("/memory/start", isLoggedIn, memory_controller.postStartMemoryProfile);
-  app.post("/memory/stop", isLoggedIn, memory_controller.postStopMemoryProfile);
-  app.post("/memory/delete", isLoggedIn, memory_controller.postDeleteMemoryProfile);
-  app.get("/memory", isLoggedIn, memory_controller.getMemoryProfile);
+  app.post("/memory/start", memory_controller.postStartMemoryProfile);
+  app.post("/memory/stop", memory_controller.postStopMemoryProfile);
+  app.post("/memory/delete", memory_controller.postDeleteMemoryProfile);
+  app.get("/memory", memory_controller.getMemoryProfile);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);

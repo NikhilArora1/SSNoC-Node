@@ -4,6 +4,7 @@
                 <meta charset="UTF-8">
                 <title>Measure Memory</title>
                  <!--<link rel='stylesheet' href='/css/style.css'/>-->
+                 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
                 <style type="text/css">
 					@media all and (min-width:480px) {
 			                	h3.head {font-size:30px}
@@ -33,24 +34,24 @@
 				
 					}
                 </style>
-                <script>
-	                function start(){
+                <script type="text/javascript">
+	                function startMemory(){
 	                	$.ajax({
 				      		url:  '/memory/start',
 				      		type: 'POST',
 				      		dataType: 'json'
 				    	}).done();	
 	                }
-	                function stop(){
+	                function stopMemory(){
 	                	$.ajax({
 				      		url:  '/memory/stop',
 				      		type: 'POST',
 				      		dataType: 'json'
 				    	}).done();	
 	                }
-	                function delete(){
+	                function deleteMemory(){
 	                	$.ajax({
-				      		url:  '/memory/stop',
+				      		url:  '/memory/delete',
 				      		type: 'POST',
 				      		dataType: 'json'
 				    	}).done();
@@ -66,9 +67,9 @@
                	<table class="head"> 
 					<tr>
 						<td>
-							<button type="button" onclick="start()">Start</button>
-							<button type="button" onclick="stop()">Stop</button>
-							<button type="button" onclick="delete()">Delete</buttton>
+							<button type="button" onclick="startMemory()">Start</button>
+							<button type="button" onclick="stopMemory()">Stop</button>
+							<button type="button" onclick="deleteMemory()">Delete</buttton>
 						</td>
 					</tr>
 					<tr>
@@ -112,8 +113,14 @@
 			  		<table>
 			  			<tr><th>Timestamp</th> <th>Used Memory</th> <th>Remaining Memory</th> <th>Used Disk</th> <th>Remaining Disk</th> </tr>
 			  			<% for(var i=0;i<memory.length;i++){ %>
-			  				<tr> <td><%=memory.createdAt%></td> <td><%=memory.usedVolatile%></td> <td><%=memory.remainingVolatile%></td> <td><%=memory.usedPersistent%></td> <td><%=memory.remainingPersistent%></td> </tr>
-			  			<%}%>
+			  				<tr> 
+			  					<td><%=memory[i].createdAt%></td> 
+			  					<td><%=memory[i].usedVolatile%></td> 
+			  					<td><%=memory[i].remainingVolatile%></td> 
+			  					<td><%=memory[i].usedPersistent%></td> 
+			  					<td><%=memory[i].remainingPersistent%></td> 
+			  				</tr>
+			  			<% } %>
 			  		</table>
 			  	</div>
 		</body>
