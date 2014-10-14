@@ -7,7 +7,7 @@ function Memory(createdAt, crumbID, usedVolatile, remainingVolatile, usedPersist
 	this.usedVolatile = usedVolatile;
 	this.remainingVolatile = remainingVolatile;
 	this.usedPersistent = usedPersistent;
-	this.availablePersistent = availablePersistent;
+	this.remainingPersistent = remainingPersistent;
 }
 
 Memory.startMeasurement=function(callback){

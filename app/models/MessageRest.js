@@ -26,7 +26,7 @@ Message.postWallMessage=function(username, message, timestamp, callback) {
         }
         else
         {
-            console.log(body);
+            //console.log(body);
             var message = new Message(body.author, null, body.content, body.postedAt);
             callback(null, message);
             return;
@@ -45,9 +45,12 @@ Message.getWallMessages=function(callback){
             return;
         }
         else {
-            console.log(body);
+            //console.log(body);
             var messages = body.map(function(item, idx, arr){
                 return new Message(item.author, null, item.content, item.postedAt);
+            });
+            messages.sort(function(a,b) {
+                return a.postedAt > b.postedAt;
             });
             callback(null, messages);
             return;
@@ -93,6 +96,11 @@ Message.getChatMessages=function(Username1, Username2, callback){
             console.log(body);
             var messages = body.map(function(item, idx, arr){
                 return new Message(item.author, item.target, item.content, item.postedAt);
+            });
+            messages.sort(function(a,b){
+                var d1 = new Date(a.postedAt);
+                var d2 = new Date(b.postedAt);
+                return d1-d2;
             });
             callback(null, messages);
             return;

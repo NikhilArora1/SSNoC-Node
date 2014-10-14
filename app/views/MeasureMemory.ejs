@@ -4,35 +4,85 @@
                 <meta charset="UTF-8">
                 <title>Measure Memory</title>
                  <!--<link rel='stylesheet' href='/css/style.css'/>-->
+                 <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
                 <style type="text/css">
-		@media all and (min-width:480px) {
-                	h3.head {font-size:30px}
-                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
-                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
-                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
-                	input[type=submit]{color:green;background-color:#F5F5F5}
-                	select {color:green;background-color:#F5F5F5;}
-                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
-                	tr {font-size:1.1em;color:green}
-                	td {text-align:left;width:33%}  
-                	td.a {text-align:right;width:10%}
-			img.usr {max-height:12%;}
-		}
-		@media all and (max-width:480px){
-			h3.head {font-size:30px}
-                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
-                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
-                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
-                	input[type=submit]{color:green;background-color:#F5F5F5;font-size:20px;width:100px;height:40px}
-                	select {color:green;background-color:#F5F5F5;width:100px;height:40px;font-size:20px}
-                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
-                	tr {font-size:1.1em;color:green}
-                	td {text-align:left;width:33%}  
-                	td.a {text-align:right;}
-			img.usr {height:10%;}
-	
-		}
+					@media all and (min-width:480px) {
+			                	h3.head {font-size:30px}
+			                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+			                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+			                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+			                	input[type=submit]{color:green;background-color:#F5F5F5}
+			                	select {color:green;background-color:#F5F5F5;}
+			                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+			                	tr {font-size:1.1em;color:green}
+			                	th {text-align: left;}
+			                	td {text-align:left;}  
+			                	td.a {text-align:right;width:10%}
+			                	.memory{
+			                		width:100%;
+			                	}	
+			                	button {
+			                		color:green;
+			                		background-color: #F5F5F5;
+			                	}
+					}
+					@media all and (max-width:480px){
+						h3.head {font-size:30px}
+			                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+			                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+			                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+			                	input[type=submit]{color:green;background-color:#F5F5F5;font-size:20px;width:100px;height:40px}
+			                	select {color:green;background-color:#F5F5F5;width:100px;height:40px;font-size:20px}
+			                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+			                	tr {font-size:1.1em;color:green}
+			                	th {text-align: left;}
+			                	td {text-align:left;}  
+			                	td.a {text-align:right;width:10%}
+						img.usr {height:10%;}
+				
+					}
                 </style>
+                <script type="text/javascript">
+	                function startMemory(){
+	                	$.ajax({
+				      		url:  '/memory/start',
+				      		type: 'POST',
+				      		dataType: 'json'
+				    	}).done();	
+	                }
+	                function stopMemory(){
+	                	$.ajax({
+				      		url:  '/memory/stop',
+				      		type: 'POST',
+				      		dataType: 'json'
+				    	}).done();	
+	                }
+	                function deleteMemory(){
+	                	$.ajax({
+				      		url:  '/memory/delete',
+				      		type: 'POST',
+				      		dataType: 'json'
+				    	}).done();
+				    console.log(timeWindow);
+	                }
+
+	                //set up the selected option of time window on load
+		    		// console.log(JSON.stringify(timeWindow)); //for testing
+		      // 		selObj=document.getElementById("selectTimeWindow");
+			    	// var times=new Array();
+			    	// var dispTimes=new Array();
+			    	// for(i=1;i<15;i++){
+			    	// 	times[i]=i.toString();
+			    	// 	dispTimes[i]=i.toString()+"h"
+			    	// 	console.log(times[i], dispTimes[i]);//for testing
+			    	// }
+			    	// htmlStr="";
+			    	// for(i=0;i<times.length;i++){
+			    	// 	if(timeWindow===times[i]){htmlStr+="<option value='"+times[i]+"' selected='selected'>"+dispTimes[i]+"</option>"; }
+			    	// 	else {htmlStr+="<option value='"+times[i]+"'>"+dispTimes[i]+"</option>"}
+			    	// }
+			    	// selObj.innerHTML=htmlStr;
+                </script>
         </head>
         <body>
   				<!--this will not show-->
@@ -40,43 +90,66 @@
                         <tr><td><h3 class="head">&nbsp;Measure Memory</h3></td>
                         <td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
                 </table>
-               	<table class="head">
-               	<tr><td class ="head">
-               	<label for="Time Window">Time Window</label>
-			  	  <select name="Time Window" id="Time Window">
-			      <option>24</option>
-			      <option>23</option>
-			      <option>22</option>
-			      <option>21</option>
-			      <option>20</option>
-			      <option>19</option>
-			      <option>18</option>
-			      <option>17</option>
-			      <option>16</option>
-			      <option>15</option>
-			      <option>14</option>
-			      <option>13</option>
-			      <option>12</option>
-			      <option>11</option>
-			      <option>10</option>
-			      <option>09</option>
-			      <option>08</option>
-			      <option>07</option>
-			      <option>06</option>
-			      <option>05</option>
-			      <option>04</option>
-			      <option>03</option>
-			      <option>02</option>
-			      <option>01</option>
-			    </select></p>
-			  	<p><button type="button">Start</button>
-			  	<button type="button">Stop</button></p></td></tr></table>
-			  	<table><tr>
-			  	<td>Timestamp</td>
-			  	<td>Online Users</td>
-			  	<td>Used Volatile Memory</td>
-			  	<td>Remaining Volatile Memory</td>
-			  	<td>Used Non-Volatile Memory</td>
-			  	<td>Remaining Non-Volatile Memory</td>
-			  	</tr>
-			  	
+               	<table class="head"> 
+					<tr>
+						<td>
+							<button type="button" onclick="startMemory()">Start</button>
+							<button type="button" onclick="stopMemory()">Stop</button>
+							<button type="button" onclick="deleteMemory()">Delete</buttton>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<form action="/memory" method="GET">
+								<input type="submit" value="View" />
+								<select name="timeWindow" id="selectTimeWindow">
+									<% console.log(timeWindow); %>
+									<option value="24" <% if(timeWindow=="24"){ %> selected="selected" <% } %> >24h</option>
+									<option value="23" <% if(timeWindow=="23"){ %> selected="selected" <% } %> >23h</option>
+									<option value="22" <% if(timeWindow=="22"){ %> selected="selected" <% } %> >22h</option>
+									<option value="21" <% if(timeWindow=="21"){ %> selected="selected" <% } %> >21h</option>
+									<option value="20" <% if(timeWindow=="20"){ %> selected="selected" <% } %> >20h</option>
+									<option value="19" <% if(timeWindow=="19"){ %> selected="selected" <% } %> >19h</option>
+									<option value="18" <% if(timeWindow=="18"){ %> selected="selected" <% } %> >18h</option>
+									<option value="17" <% if(timeWindow=="17"){ %> selected="selected" <% } %> >17h</option>
+									<option value="16" <% if(timeWindow=="16"){ %> selected="selected" <% } %> >16h</option>
+									<option value="15" <% if(timeWindow=="15"){ %> selected="selected" <% } %> >15h</option>
+									<option value="14" <% if(timeWindow=="14"){ %> selected="selected" <% } %> >14h</option>
+									<option value="13" <% if(timeWindow=="13"){ %> selected="selected" <% } %> >13h</option>
+									<option value="12" <% if(timeWindow=="12"){ %> selected="selected" <% } %> >12h</option>
+									<option value="11" <% if(timeWindow=="11"){ %> selected="selected" <% } %> >11h</option>
+									<option value="10" <% if(timeWindow=="10"){ %> selected="selected" <% } %> >10h</option>
+									<option value="9" <% if(timeWindow=="9"){ %> selected="selected" <% } %> >09h</option>
+									<option value="8" <% if(timeWindow=="8"){ %> selected="selected" <% } %> >08h</option>
+									<option value="7" <% if(timeWindow=="7"){ %> selected="selected" <% } %> >07h</option>
+									<option value="6" <% if(timeWindow=="6"){ %> selected="selected" <% } %> >06h</option>
+									<option value="5" <% if(timeWindow=="5"){ %> selected="selected" <% } %> >05h</option>
+									<option value="4" <% if(timeWindow=="4"){ %> selected="selected" <% } %> >04h</option>
+									<option value="3" <% if(timeWindow=="3"){ %> selected="selected" <% } %> >03h</option>
+									<option value="2" <% if(timeWindow=="2"){ %> selected="selected" <% } %> >02h</option>
+									<option value="1" <% if(timeWindow=="1"){ %> selected="selected" <% } %> >01h</option>
+								</select>
+
+							</form>
+						</td>
+					</tr>
+				</table>
+
+
+			  	<div id="table">
+			  		<table class="memory">
+			  			<tr><th>Timestamp</th> <th>Used Memory</th> <th>Remaining Memory</th> <th>Used Disk</th> <th>Remaining Disk</th> </tr>
+			  			<% for(var i=0;i<memory.length;i++){ %>
+			  				
+			  				<tr> 
+			  					<td><%=memory[i].createdAt%></td> 
+			  					<td><%=memory[i].usedVolatile%>&nbsp;KB</td> 
+			  					<td><%=memory[i].remainingVolatile%>&nbsp;KB</td> 
+			  					<td><%=memory[i].usedPersistent%>&nbsp;KB</td> 
+			  					<td><%=memory[i].remainingPersistent%>&nbsp;KB</td> 
+			  				</tr>
+			  			<% } %>
+			  		</table>
+			  	</div>
+		</body>
+</html>

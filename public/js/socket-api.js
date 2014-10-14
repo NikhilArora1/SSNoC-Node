@@ -2,10 +2,7 @@ function init(){
 	var serverBaseUrl = document.domain;
 
   	var socket = io.connect(serverBaseUrl);
-
   	var sessionId = '';
-  	var userName =  '';
-  	var user = '';
 
   	socket.on('connect', function () {
     	sessionId = socket.socket.sessionid;
@@ -14,13 +11,11 @@ function init(){
       		type: 'GET',
       		dataType: 'json'
     	}).done(function(data) {
-    		console.log(JSON.stringify(data)); //for test
       		userName = data.local.name;
       		user = data.local;
-      		console.log(JSON.stringify(user));   //for test
       		$("#username").append(userName);
-
       		socket.emit('newUser', {id: sessionId, name: userName});
+      		console.log("user connected: " + userName);
     	});
   	});
 
@@ -37,31 +32,39 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		var $div = $("<div>").loadTemplate($("#wall_message_template"),data.message);
-		$("#messages").prepend($div);
-
+		addNewWallMessage($("#messages"), data);
 	});
 
 	socket.on('newStatusMessage', function(data){
-		data.status.statusIcon = getStatusIcon(data.status.status);
-		var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
-		$("#messages").prepend($div);
-		
-
-		//$("#messages").prepend("<p> Status: | user: " + data.status.username + " date: " + data.status.updatedAt 
-		//	+ " status: " + data.status.status + " | </p>");
+		console.log("new status message: " + JSON.stringify(data) );
+		addNewStatusMessage($("#messages"), data);
+		refreshPeopleDirectory();
 	});
 
 	$("#submitWallMessage").click(function(){
 		var text = $("#wallMessage").val();
-		socket.emit('postWallMessage', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
+		socket.emit('postWallMessage', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
 		$("#wallMessage").val("");
 	});
 
 	$("#selectStatus").change(function(){
 		var text = $("#selectStatus").val();
-		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd hh:mm')});
+		socket.emit('postStatus', {username: userName, status: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
 		$("#statusMessage").val("");
+	});
+
+	socket.on('newPrivateMessage', function(data){
+		console.log("private message received... " + JSON.stringify(data));
+		onNewPrivateMessage(data.message);
+	});
+
+	$("#privateChatSubmit").click(function(){
+		var text = $("#privateChatInput").val();
+		var user = userName;
+		var buddy = chatBuddy;
+		console.log("send private message: " + user + " / " + buddy + " / " + text);
+		socket.emit('sendPrivateMessage', {author: user, target: buddy, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
+		$("#privateChatInput").val('');
 	});
 
 	$.addTemplateFormatter({

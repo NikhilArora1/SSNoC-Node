@@ -28,7 +28,7 @@
 		background-color:#F5F5F5;
 		border:2px solid #DCDCDC;
 	}
-	table.head {width:100%;background-color:#F5F5F5;}
+	table.head, td {width:100%;background-color:#F5F5F5;}
 	h3.head {font-size:30px}
 	select {color:green;background-color:#F5F5F5;}
 	.shortBar{
@@ -69,7 +69,12 @@
 
 	}
 
-
+ 
+	td.a {
+		text-align:right;
+		margin:0%;
+		padding: 0%;
+	}
 
 
 
@@ -86,8 +91,7 @@
 	
 	form.message {color:green;background-color:#F5F5F5;}
 	tr {font-size:1.1em;color:green}
-	td {text-align:left;width:33%}  
-	td.a {text-align:right;width:10%}
+
     img.usr {max-height:12%;}
 }
 @media all and (max-width:480px){
