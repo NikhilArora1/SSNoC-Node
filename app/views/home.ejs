@@ -6,6 +6,8 @@
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/js/date.js"></script>
+		<link rel="stylesheet" href="/css/toastr.min.css"/>
+		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
 		<script>
@@ -30,31 +32,50 @@
 		</script>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
 		<script type="text/javascript">
+			function showPublicWall(){
+				$("#peopleDirectory").hide();
+				$("#chatBuddies").hide();
+				refreshPublicWall();
+				$("#publicWall").show();
+			}
+
+			function showPeopleDirectory(){
+				$("#publicWall").hide();
+				$("#chatBuddies").hide();
+				refreshPeopleDirectory();
+				$("#peopleDirectory").show();
+			}
+
+			function showPrivateChat(){
+				$("#publicWall").hide();
+				$("#peopleDirectory").hide();
+				refreshChatBuddies();
+				$("#chatBuddies").show();
+			}
+
 			function selectPage(selObj){
 				content=selObj.options[selObj.selectedIndex].value;
 				if(content==="publicWall"){
-					$("#peopleDirectory").hide();
-					$("#chatBuddies").hide();
-					$("#publicWall").show();
-				}
-				if(content==="peopleDirectory"){
-					$("#publicWall").hide();
-					$("#chatBuddies").hide();
-					$("#peopleDirectory").show();
-				}
-				if(content==="privateChat"){
-					$("#publicWall").hide();
-					$("#peopleDirectory").hide();
-					$("#chatBuddies").show();
+					showPublicWall();
+				} else if(content==="peopleDirectory"){
+					showPeopleDirectory();
+				} else if(content==="privateChat"){
+					showPrivateChat();
 				}
 			}
+
+			$(document).ready(function(){
+				// show public wall on document load
+				showPublicWall();
+				$("#pageSelector").val("publicWall");
+			});
 		</script>
 	</head>
 
 	<body>
 		<div id="header" class="longBar">
 			<table class="head">
-                        <tr><td><h3 class="head" id="username"></h3></td><td>message</td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                        <tr><td><h3 class="head" id="username"></h3></td><td></td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
                         <tr>
                         	<td>
                         		<select id="selectStatus">	
@@ -68,9 +89,9 @@
                         </tr>
             </table>
 		</div>
-		<div id="pageSelector" class="longBar">
+		<div class="longBar">
 			<form>
-        		<select onchange="selectPage(this);">
+        		<select id="pageSelector" onchange="selectPage(this);">
         			<option value="publicWall">Public Wall</option>
         			<option value="peopleDirectory">People Directory</option>
         			<option value="privateChat">Private Chat</option>
@@ -87,6 +108,9 @@
 				</div>
 			</div>
 			<div id="peopleDirectory">
+				<h2>Me</h2>
+				<div id="myUser">
+				</div>
 				<h2>Online Users</h2>
 				<div id="onlineUsers">
 				</div>
@@ -120,16 +144,22 @@
                 </p>
 			</div>
         </script>
-        <script type="text/html" id="wall_status_template">
+		<script type="text/html" id="wall_status_template">
             <div  class="shortBar">
                 <h5 class="username" data-content="username"></h5>
                 <span class="timestamp" data-content="updatedAt"></span>
                 <p class="status">
                     Status:
-                    <span class="statusCode" data-content="status" data-format="StatusFormatter">something something</span>
+                    <span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
                     <img data-src="statusIcon"/>
                 </p>
             </div>
+        </script>
+        <script type="text/html" id="chat_buddy_user">
+        	<div class="chatBuddy">
+        		<h5 class="username" data-content="username"></h5>
+    			<img class="userOnlineIcon" data-src="userOnlineIcon"/>
+        	</div>
         </script>
 	</body>
 </html>

@@ -4,6 +4,8 @@ var StatusRest = require('./models/StatusRest');
 module.exports = function(_, io, participants) {
   io.on("connection", function(socket){
     socket.on("newUser", function(data) {
+      // join this user's private message room
+      socket.join(data.name);
       participants.online[data.id] = {'userName' : data.name, 'status': data.status};
       io.sockets.emit("newConnection", {participants: participants});
     });
@@ -38,6 +40,21 @@ module.exports = function(_, io, participants) {
               return;
             }
             io.sockets.emit('newStatusMessage', {status: status});
+        });
+    });
+
+    socket.on("sendPrivateMessage", function(data){
+        var author = data.author;
+        var target = data.target;
+        var message = data.message;
+        var timestamp = data.timestamp;
+        MessageRest.sendChatMessage(author, target, message, timestamp, function(err, msg){
+          if(err){
+              console.log("error sending message: " + err);
+              return;
+            }
+          io.sockets.in(msg.author).emit('newPrivateMessage', {message: msg});
+          io.sockets.in(msg.target).emit('newPrivateMessage', {message: msg});
         });
     });
 

@@ -3,6 +3,7 @@ var User = require('./models/UserRest');
 module.exports = function(app, _, io, participants, passport) {
   var user_controller = require('./controllers/user')(_, io, participants, passport, refreshAllUsers);
   var people_controller = require('./controllers/people')(_, io, participants, passport);
+  var messages_controller = require('./controllers/messages')(_, io, participants, passport);
 
   app.get("/", user_controller.getJoinCommunity);
   app.get("/home", isLoggedIn, function(req, res){
@@ -31,14 +32,34 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/publicWall", isLoggedIn, function(req, res){
     res.render("publicWall");
   });
+  app.get("/privateChat", isLoggedIn, function(req, res){
+    console.log("private chat with: " + req.query.name);
+    res.render("privateChat", {buddyName: req.query.name});
+  });
   
   app.post("/status", user_controller.postPeoplePage);
+
+  // data routes
+  app.get("/user", isLoggedIn, user_controller.getUser);
+  app.get("/wall", isLoggedIn, messages_controller.getWallContents);
+  app.get("/participants", isLoggedIn, function(req, res){
+    User.getUsers(null, function(err, users){
+      if (!err && users !== null) {
+        participants.all = [];
+        users.forEach(function(user) {
+          participants.all.push(user.local);
+        });
+      }
+      res.json(200, participants);
+    });
+  });
+  app.get("/chatBuddies", isLoggedIn, messages_controller.getChatBuddies);
+  app.get("/privateMessages", isLoggedIn, messages_controller.getPrivateMessages);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
   app.get("/welcome", isLoggedIn, user_controller.getWelcome);
   app.get("/people", isLoggedIn, people_controller.getPeople);
-  app.get("/user", isLoggedIn, user_controller.getUser);
   app.get('/signup', user_controller.getSignup);
   app.post("/login", passport.authenticate('local-login', {
     successRedirect : '/people',
