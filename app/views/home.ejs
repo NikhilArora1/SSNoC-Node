@@ -75,7 +75,15 @@
 	<body>
 		<div id="header" class="longBar">
 			<table class="head">
-                        <tr><td><h3 class="head" id="username"></h3></td><td></td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                        <tr>
+                        	<td><h3 class="head" id="username"></h3></td>
+                        	<td class="a">
+                        		<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+                        	</td>
+                        	<td class="a">
+                        		<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+                        	</td>
+                        </tr>
                         <tr>
                         	<td>
                         		<select id="selectStatus">	

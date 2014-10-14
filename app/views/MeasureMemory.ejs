@@ -63,7 +63,25 @@
 				      		type: 'POST',
 				      		dataType: 'json'
 				    	}).done();
+				    console.log(timeWindow);
 	                }
+
+	                //set up the selected option of time window on load
+		    		// console.log(JSON.stringify(timeWindow)); //for testing
+		      // 		selObj=document.getElementById("selectTimeWindow");
+			    	// var times=new Array();
+			    	// var dispTimes=new Array();
+			    	// for(i=1;i<15;i++){
+			    	// 	times[i]=i.toString();
+			    	// 	dispTimes[i]=i.toString()+"h"
+			    	// 	console.log(times[i], dispTimes[i]);//for testing
+			    	// }
+			    	// htmlStr="";
+			    	// for(i=0;i<times.length;i++){
+			    	// 	if(timeWindow===times[i]){htmlStr+="<option value='"+times[i]+"' selected='selected'>"+dispTimes[i]+"</option>"; }
+			    	// 	else {htmlStr+="<option value='"+times[i]+"'>"+dispTimes[i]+"</option>"}
+			    	// }
+			    	// selObj.innerHTML=htmlStr;
                 </script>
         </head>
         <body>
@@ -84,31 +102,32 @@
 						<td>
 							<form action="/memory" method="GET">
 								<input type="submit" value="View" />
-								<select name="timeWindow">
-									<option value="24">24h</option>
-									<option value="23">23h</option>
-									<option value="22">22h</option>
-									<option value="21">21h</option>
-									<option value="20">20h</option>
-									<option value="19">19h</option>
-									<option value="18">18h</option>
-									<option value="17">17h</option>
-									<option value="16">16h</option>
-									<option value="15">15h</option>
-									<option value="14">14h</option>
-									<option value="13">13h</option>
-									<option value="12">12h</option>
-									<option value="11">11h</option>
-									<option value="10">10h</option>
-									<option value="9">09h</option>
-									<option value="8">08h</option>
-									<option value="7">07h</option>
-									<option value="6">06h</option>
-									<option value="5">05h</option>
-									<option value="4">04h</option>
-									<option value="3">03h</option>
-									<option value="2">02h</option>
-									<option value="1">01h</option>
+								<select name="timeWindow" id="selectTimeWindow">
+									<% console.log(timeWindow); %>
+									<option value="24" <% if(timeWindow=="24"){ %> selected="selected" <% } %> >24h</option>
+									<option value="23" <% if(timeWindow=="23"){ %> selected="selected" <% } %> >23h</option>
+									<option value="22" <% if(timeWindow=="22"){ %> selected="selected" <% } %> >22h</option>
+									<option value="21" <% if(timeWindow=="21"){ %> selected="selected" <% } %> >21h</option>
+									<option value="20" <% if(timeWindow=="20"){ %> selected="selected" <% } %> >20h</option>
+									<option value="19" <% if(timeWindow=="19"){ %> selected="selected" <% } %> >19h</option>
+									<option value="18" <% if(timeWindow=="18"){ %> selected="selected" <% } %> >18h</option>
+									<option value="17" <% if(timeWindow=="17"){ %> selected="selected" <% } %> >17h</option>
+									<option value="16" <% if(timeWindow=="16"){ %> selected="selected" <% } %> >16h</option>
+									<option value="15" <% if(timeWindow=="15"){ %> selected="selected" <% } %> >15h</option>
+									<option value="14" <% if(timeWindow=="14"){ %> selected="selected" <% } %> >14h</option>
+									<option value="13" <% if(timeWindow=="13"){ %> selected="selected" <% } %> >13h</option>
+									<option value="12" <% if(timeWindow=="12"){ %> selected="selected" <% } %> >12h</option>
+									<option value="11" <% if(timeWindow=="11"){ %> selected="selected" <% } %> >11h</option>
+									<option value="10" <% if(timeWindow=="10"){ %> selected="selected" <% } %> >10h</option>
+									<option value="9" <% if(timeWindow=="9"){ %> selected="selected" <% } %> >09h</option>
+									<option value="8" <% if(timeWindow=="8"){ %> selected="selected" <% } %> >08h</option>
+									<option value="7" <% if(timeWindow=="7"){ %> selected="selected" <% } %> >07h</option>
+									<option value="6" <% if(timeWindow=="6"){ %> selected="selected" <% } %> >06h</option>
+									<option value="5" <% if(timeWindow=="5"){ %> selected="selected" <% } %> >05h</option>
+									<option value="4" <% if(timeWindow=="4"){ %> selected="selected" <% } %> >04h</option>
+									<option value="3" <% if(timeWindow=="3"){ %> selected="selected" <% } %> >03h</option>
+									<option value="2" <% if(timeWindow=="2"){ %> selected="selected" <% } %> >02h</option>
+									<option value="1" <% if(timeWindow=="1"){ %> selected="selected" <% } %> >01h</option>
 								</select>
 
 							</form>
@@ -121,6 +140,7 @@
 			  		<table class="memory">
 			  			<tr><th>Timestamp</th> <th>Used Memory</th> <th>Remaining Memory</th> <th>Used Disk</th> <th>Remaining Disk</th> </tr>
 			  			<% for(var i=0;i<memory.length;i++){ %>
+			  				
 			  				<tr> 
 			  					<td><%=memory[i].createdAt%></td> 
 			  					<td><%=memory[i].usedVolatile%>&nbsp;KB</td> 
