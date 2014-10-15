@@ -24,7 +24,7 @@ function updateParticipants(participants){
     var userEle = '';
     for (var sId in participants.online){
       name = participants.online[sId].userName;
-      if (map[name] == undefined || map[name] !== sessionId){
+      if (map[name] == undefined){
         map[name] = {sId:sId};
       }
     }
