@@ -46,11 +46,15 @@ module.exports = function(_, io, participants, passport) {
       testRunning = false;
       clearTimeout(timeoutObject);
       timeoutObject = null;
-      broadcastResults(message);
-      PerformanceRest.teardownPerformance(function(err){
-        if(callback){
-          callback();
-        }
+      // broadcast and tear down results after making sure
+      // that pending requests have time to complete
+      process.nextTick(function(){
+        broadcastResults(message);
+        PerformanceRest.teardownPerformance(function(err){
+          if(callback){
+            callback();
+          }
+        });
       });
     } else {
       if(callback){
@@ -76,7 +80,7 @@ module.exports = function(_, io, participants, passport) {
     if(testRunning){
       console.log("postRequestCounter: " + postRequestCounter + " | request limit: " + postRequestLimit);
       if(postRequestCounter < postRequestLimit){
-          MessageRest.postWallMessage("TEST", testContent, "2014-12-12 12:12", function(){
+          MessageRest.postWallMessage("TEST", testContent, "2012-12-12 12:12", function(){
             postRequestCounter++;
             MessageRest.getWallMessages(function(){
               getRequestCounter++;
