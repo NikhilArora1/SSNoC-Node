@@ -4,6 +4,8 @@
             <meta charset="UTF-8">
             <title>Measure Performance</title>
              <!--<link rel='stylesheet' href='/css/style.css'/>-->
+            <link rel="stylesheet" href="/css/ssnoc.css">
+            <link rel="stylesheet" href="/css/ssnocMobile.css">
             <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
             <script type="text/javascript" src="/js/socket.io.min.js"></script>
             <script type="text/javascript">
@@ -25,6 +27,25 @@
 			      		dataType: 'json'
 			    	}).done();	
                 }
+            /************ for selecting status *****/
+                $.ajax({
+                url:  '/user',
+                type: 'GET',
+                dataType: 'json'
+            }).done(function(data) {
+                console.log(JSON.stringify(data)); //for test
+                statusCode= data.local.status.status;
+                console.log(JSON.stringify(statusCode));
+                selObj=document.getElementById("selectStatus");
+                statuses=["GREEN","YELLOW","RED"];  
+                displayStatuses=["OK","Help","Emergency"];
+                htmlStr="";
+                for(i=0;i<statuses.length;i++){
+                    if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+                    else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+                }
+                selObj.innerHTML=htmlStr;
+            }); 
             </script>
             <script type="text/javascript">
             	$(document).ready(function(){
@@ -41,18 +62,25 @@
         </head>
         <body>
 			<!--this will not show-->
-            <table class="head">
-                    <tr><td><h3 class="head">&nbsp;Measure Performance</h3></td>
-                    <td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
-            </table>
+            <div id="header" class="header">
+                <h3 class="head" id="username">Measure Performance</h3>
+                <form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+                <form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+                <select id="selectStatus" class="selectStatus">
+                </select>
+            </div>
            	<table class="head"> 
 				<tr>
 					<td>
+                        Test Duration In Seconds
 						<input type="number" id="duration" min="0"/>
+                        <br/>
 						<button type="button" onclick="startTests()">Start</button>
 						<button type="button" onclick="stopTests()">Stop</button>
 					</td>
 				</tr>
 			</table>
+            <div>
+            </div>
 		</body>
 </html>

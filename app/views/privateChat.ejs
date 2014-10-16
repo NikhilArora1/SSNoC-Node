@@ -28,37 +28,49 @@
 		    });
 		});
 	</script>
+	<script>
+		$.ajax({
+      		url:  '/user',
+      		type: 'GET',
+      		dataType: 'json'
+    	}).done(function(data) {
+    		console.log(JSON.stringify(data)); //for test
+      		statusCode= data.local.status.status;
+      		console.log(JSON.stringify(statusCode));
+      		selObj=document.getElementById("selectStatus");
+	    	statuses=["GREEN","YELLOW","RED"];	
+	    	displayStatuses=["OK","Help","Emergency"];
+	    	htmlStr="";
+	    	for(i=0;i<statuses.length;i++){
+	    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+	    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+	    	}
+	    	selObj.innerHTML=htmlStr;
+      	});	
+	</script>
 	<style>
     	html, body { height:100%; }
-    	#messages {
-    		height:50%;
-    		width:100%;
-    		border: 1px solid black;
-    	}
-    	#messageEntry {
-    		width:100%;
-    		float: bottom;
-    	}
-    	input#messageInput {
-    		width: 90%;
-    	}
-  </style>
+  	</style>
 </head>
 <body>
-	<div id="header" class="longBar">
-		<table class="head">
-                    <tr><td><h3 class="head" id="username"></h3></td><td></td><td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
-        </table>
-	</div>	
-	<h2 id="chatHeader">Private Chat</h2>
-	<div id="chatMessages">
+	<div id="header" class="header">
+		<h3 class="head" id="username"></h3>
+		<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+		<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+		<form class="goTo" action="/performnce"><input type="submit" value="Measure Performance"></form>
+		<select id="selectStatus" class="selectStatus">
+		</select>
 	</div>
-	<div id="messageEntry">
+	<h2 id="chatHeader">Private Chat</h2>
+	<div id="chatMessages" class="chatMessages">
+	</div>
+	<div id="messageEntry" class="messageEntry">
 		<input type="text" id="privateChatInput"/>
 		<button id="privateChatSubmit">Send</button>
 	</div>
 	<script type="text/html" id="message_template">
-		<div class="message">
+		<div class="shortBar" >		
+			<img class="userProfileImage" data-src="userProfileImage"/>
 			<h4 class="username" data-content="username"></h4>
 			<p class="timestamp" data-content="timestamp"></p>
 			<p class="message_text" data-content="message"></p>

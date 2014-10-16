@@ -160,6 +160,7 @@ function onNewPrivateMessage(message){
 
 function insertChatMessage(chatMessage){
     var $div = $("<div>").loadTemplate($("#message_template"), {
+        userProfileImage: '/img/photo4.png',
         username: chatMessage.author,
         timestamp: chatMessage.postedAt,
         message: chatMessage.content
