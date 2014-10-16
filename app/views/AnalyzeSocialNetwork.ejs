@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+        <head>
+                <meta charset="UTF-8">
+                <title>Social Network Analysis</title>
+                 <!--<link rel='stylesheet' href='/css/style.css'/>-->
+                <script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+                <style type="text/css">
+					@media all and (min-width:480px) {
+			                	h3.head {font-size:30px}
+			                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+			                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+			                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+			                	input[type=submit]{color:green;background-color:#F5F5F5}
+			                	select {color:green;background-color:#F5F5F5;}
+			                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+			                	tr {font-size:1.1em;color:green}
+			                	th {text-align: left;}
+			                	td {text-align:left;}  
+			                	td.a {text-align:right;width:10%}
+			                	.memory{
+			                		width:100%;
+			                	}	
+			                	button {
+			                		color:green;
+			                		background-color: #F5F5F5;
+			                	}
+					}
+					@media all and (max-width:480px){
+						h3.head {font-size:30px}
+			                	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}
+			                	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
+			                	table.head {width:100%;margin-top:1%;background-color:#F5F5F5;border:1px solid #DCDCDC}
+			                	input[type=submit]{color:green;background-color:#F5F5F5;font-size:20px;width:100px;height:40px}
+			                	select {color:green;background-color:#F5F5F5;width:100px;height:40px;font-size:20px}
+			                	/*form.a {background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%; border:1px solid #DCDCDC;}*/
+			                	tr {font-size:1.1em;color:green}
+			                	th {text-align: left;}
+			                	td {text-align:left;}  
+			                	td.a {text-align:right;width:10%}
+						img.usr {height:10%;}
+				
+					}
+                </style>
+        </head>
+        <body>
+  				<!--this will not show-->
+                <table class="head">
+                        <tr><td><h3 class="head">&nbsp;Social Network Analysis</h3></td>
+                        <td class="a"><form action="/logout"><input type="submit" value="logout"></form></td></tr>
+                </table>
+               	<table class="head"> 
+					<tr>
+						<td>
+							<form action="/analyze" method="GET">
+								<input type="number" name="timeWindow"/>
+								<input type="submit" value="View"/>
+							</form>
+						</td>
+					</tr>
+				</table>
+
+			  	<div id="table">
+			  		<table class="memory">
+			  			<% for(var i=0;i<groups.length;i++){ %>
+			  				<% var users = groups[i]; %>
+			  				<% var userCount = users.length; %>
+			  				<th colspan=<%=userCount%>>Group (<%=userCount%>)</th>
+			  				<tr> 
+			  				<% for(var j=0; j < users.length; j++){ %>
+
+							
+			  					<td><%=users[j]%></td> 
+			  				
+
+			  				<% } %>
+			  				</tr>
+			  			<% } %>
+			  		</table>
+			  	</div>
+		</body>
+</html>
