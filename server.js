@@ -8,6 +8,8 @@ var express = require("express"),
   flash = require('connect-flash'),
   User = require('./app/models/UserRest');
 
+  var sna = require('./app/models/SocialNetworkAnalyzer');
+
 var participants = {
   online : {},
   all : []

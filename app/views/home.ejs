@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta name="viewport" content="width=360, initial-scale=1.0" />
 		<title>SSNoC SB4</title>
 		<script type="text/javascript" src="/js/socket.io.min.js"></script>
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
@@ -31,6 +32,7 @@
 	      	});	
 		</script>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
+		<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
 		<script type="text/javascript">
 			function showPublicWall(){
 				$("#peopleDirectory").hide();
@@ -73,31 +75,16 @@
 	</head>
 
 	<body>
-		<div id="header" class="longBar">
-			<table class="head">
-                        <tr>
-                        	<td><h3 class="head" id="username"></h3></td>
-                        	<td class="a">
-                        		<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
-                        	</td>
-                        	<td class="a">
-                        		<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
-                        	</td>
-                        </tr>
-                        <tr>
-                        	<td>
-                        		<select id="selectStatus">	
-                        			<!--
-                        			<option value="GREEN" >OK</option>
-                        			<option value="YELLOW" >Help</option>
-                        			<option value="RED" >Emergency</option>
-                        			-->
-                        		</select>
-                        	</td>
-                        </tr>
-            </table>
+		<div id="header" class="header">
+			<h3 class="head" id="username"></h3>
+			<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+			<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+			<form class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
+			<form class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
+			<select id="selectStatus" class="selectStatus">
+			</select>
 		</div>
-		<div class="longBar">
+		<div class="header">
 			<form>
         		<select id="pageSelector" onchange="selectPage(this);">
         			<option value="publicWall">Public Wall</option>
@@ -106,7 +93,7 @@
         		</select>
         	</form>
 		</div>
-		<div id="content">
+		<div id="content" class="content">
 			<div id="publicWall">
 				<div id="submitMessageBar" class="longBar">
 					<input id="wallMessage" type="text" name="message"/>
@@ -125,6 +112,7 @@
 				<h2>Offline Users</h2>
 				<div id="offlineUsers">
 				</div>
+
 			</div>
 			<div id="chatBuddies">
 			</div>
@@ -160,6 +148,9 @@
                     Status:
                     <span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
                     <img data-src="statusIcon"/>
+                </p>
+                <p class="placeHolder">
+                	placeHolder
                 </p>
             </div>
         </script>

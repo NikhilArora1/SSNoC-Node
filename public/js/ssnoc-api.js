@@ -24,7 +24,7 @@ function updateParticipants(participants){
     var userEle = '';
     for (var sId in participants.online){
       name = participants.online[sId].userName;
-      if (map[name] == undefined || map[name] !== sessionId){
+      if (map[name] == undefined){
         map[name] = {sId:sId};
       }
     }
@@ -160,6 +160,7 @@ function onNewPrivateMessage(message){
 
 function insertChatMessage(chatMessage){
     var $div = $("<div>").loadTemplate($("#message_template"), {
+        userProfileImage: '/img/photo4.png',
         username: chatMessage.author,
         timestamp: chatMessage.postedAt,
         message: chatMessage.content
