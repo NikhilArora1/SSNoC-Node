@@ -7,6 +7,7 @@ module.exports = function(app, _, io, participants, passport) {
   var memory_controller = require('./controllers/measureMemory')(_, io, participants, passport);
   var performance_controller = require('./controllers/MeasurePerformance')(_, io, participants, passport);
   var sna_controller = require('./controllers/analyzeSocialNetwork')(_, io, participants, passport);
+  var ap_controller = require('./controllers/administerProfile')(_, io, participants, passport);
 
 
   var isTestRunning = function(req, res, next){
@@ -84,6 +85,10 @@ module.exports = function(app, _, io, participants, passport) {
 
   // social network analysis
   app.get("/analyze", isLoggedIn, sna_controller.getSocialNetworkAnalysis);
+  
+  // administer profile routes
+  app.get("/loadUser", isLoggedIn, ap_controller.loadUser);
+  app.post("/updateUser", isLoggedIn, ap_controller.updateUser);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
