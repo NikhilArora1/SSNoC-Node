@@ -62,6 +62,10 @@ function updateParticipants(participants){
         } else {
             $div.find("#launchPrivateChat").remove();
         }
+        // administrater user profile
+        $div.find("#adminProfile").click(function(){
+                adminProfile(username);
+            }); 
         
     	$target.append($div);
     });
@@ -147,6 +151,12 @@ function createChatBuddyCell(user){
 function startPrivateChat(user){
     var url = "/privateChat?name=" + user;
     console.log('starting chat with ' + url);
+    window.location = url;
+}
+
+function adminProfile(user){
+    var url = "/updateProfile?name=" + user;
+    console.log('satrting admin profile of '+ user);
     window.location = url;
 }
 

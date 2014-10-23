@@ -81,6 +81,7 @@
 		width:95%;
 		padding:1%;
 		margin-top:1%;
+		color: green;
 		background-color: #F5F5F5;
 		border: 2px solid #DCDCDC;
 	}
@@ -119,14 +120,17 @@
 		color:green;
 		background-color: #F5F5F5;
 	}
-	#launchPrivateChat{
+	button.launchPrivateChat{
 		margin-top: 1.67em;
 		color:green;
 		background-color: #F5F5F5;
 		float:right;
-		color:green;
-		background-color:#F5F5F5;
 
+	}
+	button.adminProfile{
+		float: right;
+		clear: right;
+			
 	}
 
 /**********************block ends***********/

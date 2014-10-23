@@ -76,10 +76,6 @@
 				document.getElementById("profileForm").reset();
 			}
 
-			function adminProfile(user){
-			    var url = "/adminProfile"
-			    window.location = url;
-			}
 		</script>
 	</head>
 
@@ -97,7 +93,7 @@
 			<div id="profile" class="shortBar">
 				<form id="profileForm" action="/updateProfile" method="POST" >
 					User Name:
-					<input type="text" name="userName" placeholder="<%=userName%>"/><br/>
+					<input type="text" name="username" placeholder="<%=username%>"/><br/>
 					Password:
 					<input type="text" name="password" placeholder="<%=password%>"/><br/>
 					Privilege Level:
