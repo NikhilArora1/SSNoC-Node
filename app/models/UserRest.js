@@ -53,7 +53,7 @@ User.getUser = function(user_name, callback) {
 			 } else {
   			 new_status = new Status(body.userName, "GREEN", null);
   		}
-      var user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
+      var user = new User(body.userName, null, new_status, body.accountStatus, body.privilegeLevel, false);
       callback(null, user);
       return;
     }
@@ -102,7 +102,14 @@ User.getAllUsers = function(callback) {
     }
     if (res.statusCode === 200) {
       var users = body.map(function(item, idx, arr){
-        return new User(item.userName, item.password, null, body.accountStatus, body.privilegeLevel, false);
+    	  var lastStatusCode = item.lastStatusCode;
+	      var new_status = null;
+	      if(lastStatusCode != null){
+	         new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+	      } else {
+		       new_status = new Status(item.userName, "GREEN", null);
+		   }
+        return new User(item.userName, null, new_status, body.accountStatus, body.privilegeLevel, false);
       });
 
       users.sort(function(a,b) {
@@ -138,7 +145,16 @@ User.saveNewUser = function(user_name, password, callback) {
       callback(res.body, null);
       return;
     }
-    var new_user = new User(body.userName, password, null, null, null, true);
+    var users = body.map(function(item, idx, arr){
+    var lastStatusCode = item.lastStatusCode;
+    var new_status = null;
+    if(lastStatusCode != null){
+       new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+    } else {
+       new_status = new Status(item.userName, "GREEN", null);
+   }
+    var new_user = new User(body.userName, item.password, new_status, item.accountStatus, item.privilegeLevel, true);
+    });
     callback(null, new_user);
     return;
   });
@@ -167,7 +183,7 @@ User.updateUser = function(user_name, password, accountStatus, privilegeLevel, c
 			} else {
 	  			 new_status = new Status(body.userName, "GREEN", null);
 	  		}
-		var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, true);
+		var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
 	    callback(null, new_user);
 	});
 };
