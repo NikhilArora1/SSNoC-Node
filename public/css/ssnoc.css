@@ -84,34 +84,52 @@
 		background-color: #F5F5F5;
 		border: 2px solid #DCDCDC;
 	}
+/***********wihtin shortBar******************************************/
+/******************first block*********/
+	div.left{
+		float: left;
+		width: 25%;
+	}
 	.userProfileImage{
-		height:5%;
-		width: 5%
+		height:20%;
+		width: 20%;
 	}
 	.userOnlineIcon{
 		height:1%;
 		width:1%;
 	}
+/**********************second block***********/
+	div.middle1{
+		margin-top: 1.67em;
+		float: left;
+		width: 25%;
+	}
 	.userStatus{
-		position: absolute;
-		left:20%;
-		display: inline-block;	
+	}
+/**********************third block***********/
+	div.middle2{
+		margin-top: 1.67em;
+		float: left;
+		width: 30%;
 	}
 	.userStatusUpdateTime{
-		position: absolute;
-		left: 40%;
-		display: inline-block;
 	}
+/**********************fourth block***********/
 	button{
 		color:green;
 		background-color: #F5F5F5;
 	}
 	#launchPrivateChat{
+		margin-top: 1.67em;
+		color:green;
+		background-color: #F5F5F5;
 		float:right;
 		color:green;
 		background-color:#F5F5F5;
 
 	}
+
+/**********************block ends***********/
 
 /*********including previous style***********/
 /*	h3.content {background-color: #F5F5F5;color: green;font-size:30px;border:1px solid #DCDCDC; padding:0.5%}

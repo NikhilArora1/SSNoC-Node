@@ -3,15 +3,18 @@
 	<head>
 		<meta name="viewport" content="width=360, initial-scale=1.0" />
 		<title>SSNoC SB4</title>
+		<link rel="stylesheet" href="/css/toastr.min.css"/>
+		<link rel="stylesheet" href="/css/ssnoc.css"/>
+		<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
 		<script type="text/javascript" src="/js/socket.io.min.js"></script>
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/js/date.js"></script>
-		<link rel="stylesheet" href="/css/toastr.min.css"/>
 		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
 		<script>
+		// for select status: get the status of the current user and render into the tag
 			$.ajax({
 	      		url:  '/user',
 	      		type: 'GET',
@@ -30,9 +33,14 @@
 		    	}
 		    	selObj.innerHTML=htmlStr;
 	      	});	
+
+
+		// show public wall on document load
+			$(document).ready(function(){
+				showPublicWall();
+				$("#pageSelector").val("publicWall");
+			});
 		</script>
-		<link rel="stylesheet" href="/css/ssnoc.css"/>
-		<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
 		<script type="text/javascript">
 			function showPublicWall(){
 				$("#peopleDirectory").hide();
@@ -66,11 +74,6 @@
 				}
 			}
 
-			$(document).ready(function(){
-				// show public wall on document load
-				showPublicWall();
-				$("#pageSelector").val("publicWall");
-			});
 		</script>
 	</head>
 
@@ -118,17 +121,24 @@
 		</div>
 		<script type="text/html" id="people_directory_template">
             <div class="shortBar">
-            	<img class="userProfileImage" data-src="userProfileImage"/>
-                <h5 class="username" data-content="username"></h5>
-                <img class="userOnlineIcon" data-src="userOnlineIcon"/>
-                <p class="userStatus">Status:
-                	<span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
-                    <img data-src="statusIcon"/>
-                </p>
-                <p class="userStatusUpdateTime">Updated: 
-                <span class="timestamp" data-content="updatedAt"></span>
-                </p>
-                <button type="button" id="launchPrivateChat">Private Chat</button>
+            	<div class="left">
+	            	<img class="userProfileImage" data-src="userProfileImage"/>
+	                <h5 class="username" data-content="username"></h5>
+	                <img class="userOnlineIcon" data-src="userOnlineIcon"/>
+	            </div>
+	            <div class="middle1">
+	                Status:
+	                <img data-src="statusIcon"/>
+	               	<span class="statusCode" data-content="status" data-format="StatusFormatter"></span>
+	            </div>
+	            <div class="middle2">
+	                <p class="userStatusUpdateTime">Updated: 
+	                <span class="timestamp" data-content="updatedAt"></span>
+	                </p>
+	            </div>
+                <button type="button" id="launchPrivateChat" class="right">Private Chat</button>
+                <button type="button" class="adminProfile" onclick="adminProfile()">Administer Profile</button>
+                <div class="placeHolder">placeHolder</div>
             </div>
         </script>
         <script type="text/html" id="wall_message_template">

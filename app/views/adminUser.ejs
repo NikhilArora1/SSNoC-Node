@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="width=360, initial-scale=1.0" />
+		<title>SSNoC SB4</title>
+		<link rel="stylesheet" href="/css/toastr.min.css"/>
+		<link rel="stylesheet" href="/css/ssnoc.css"/>
+		<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
+		<script type="text/javascript" src="/js/socket.io.min.js"></script>
+		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
+		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
+		<script type="text/javascript" src="/js/date.js"></script>
+		<script type="text/javascript" src="/js/toastr.min.js"></script>
+		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
+		<script type="text/javascript" src="/js/socket-api.js"></script>
+		<script>
+		// for select status: get the status of the current user and render into the tag
+			$.ajax({
+	      		url:  '/user',
+	      		type: 'GET',
+	      		dataType: 'json'
+	    	}).done(function(data) {
+	    		console.log(JSON.stringify(data)); //for test
+	      		statusCode= data.local.status.status;
+	      		console.log(JSON.stringify(statusCode));
+	      		selObj=document.getElementById("selectStatus");
+		    	statuses=["GREEN","YELLOW","RED"];	
+		    	displayStatuses=["OK","Help","Emergency"];
+		    	htmlStr="";
+		    	for(i=0;i<statuses.length;i++){
+		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+		    	}
+		    	selObj.innerHTML=htmlStr;
+	      	});	
+	    //show public wall on document load	
+			$(document).ready(function(){
+				showPublicWall();
+				$("#pageSelector").val("publicWall");
+			});
+		</script>
+		<script type="text/javascript">
+			function showPublicWall(){
+				$("#peopleDirectory").hide();
+				$("#chatBuddies").hide();
+				refreshPublicWall();
+				$("#publicWall").show();
+			}
+
+			function showPeopleDirectory(){
+				$("#publicWall").hide();
+				$("#chatBuddies").hide();
+				refreshPeopleDirectory();
+				$("#peopleDirectory").show();
+			}
+
+			function showPrivateChat(){
+				$("#publicWall").hide();
+				$("#peopleDirectory").hide();
+				refreshChatBuddies();
+				$("#chatBuddies").show();
+			}
+
+			function selectPage(selObj){
+				content=selObj.options[selObj.selectedIndex].value;
+				if(content==="publicWall"){
+					showPublicWall();
+				} else if(content==="peopleDirectory"){
+					showPeopleDirectory();
+				} else if(content==="privateChat"){
+					showPrivateChat();
+				}
+			}
+
+			function cancel(){
+				document.getElementById("profileForm").reset();
+			}
+
+			function adminProfile(user){
+			    var url = "/adminProfile"
+			    window.location = url;
+			}
+		</script>
+	</head>
+
+	<body>
+		<div id="header" class="header">
+			<h3 class="head" id="username"></h3>
+			<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+			<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+			<form class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
+			<select id="selectStatus" class="selectStatus">
+			</select>
+		</div>
+
+		<div id="content" class="content">
+			<div id="profile" class="shortBar">
+				<form id="profileForm" action="/updateProfile" method="POST" >
+					User Name:
+					<input type="text" name="userName" placeholder="<%=userName%>"/><br/>
+					Password:
+					<input type="text" name="password" placeholder="<%=password%>"/><br/>
+					Privilege Level:
+					<select name="privilegeLevel">
+						<option value="citizen" <% if(privilegeLevel==="citizen"){ %> selected="selected" <% } %> >Citizen</option>
+						<option value="coordinator" <% if(privilegeLevel==="coordinator"){ %> selected="selected" <% } %> >Coordinator</option>
+						<option value="monitor" <% if(privilegeLevel==="monitor"){ %> selected="selected" <% } %> >Monitor</option>
+						<option value="administrator" <% if(privilegeLevel==="accountStatus"){ %> selected="selected" <% } %> >Administrator</option>
+					</select></br>
+					Account Status:
+					<select name="accountStatus">
+						<option value="active" <% if(accountStatus==="active"){ %> selected="selected" <% } %>  >Active</option>
+						<option value="inactive" <% if(accountStatus==="inactive"){ %> selected="selected" <% } %> >Inactive</option>
+					</select></br>
+					<input type="button" onclick="cancel()" value="Cancel"/>
+					<input type="submit" value="Save"/>
+				</form>
+			</div>
+			
+		</div>
+	</body>
+</html>
