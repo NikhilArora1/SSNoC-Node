@@ -169,16 +169,20 @@ User.updateUser = function(user, userData, callback) {
 		if (err) {
 			callback(err, null);
 			return;
-		}
-		var lastStatusCode = body.lastStatusCode;
-	    var new_status = null;
-			if(lastStatusCode != null){
-			   new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
-			} else {
-	  			 new_status = new Status(body.userName, "GREEN", null);
-	  		}
-		var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
-	    callback(null, new_user);
+		} else if(res.statusCode === 200 || res.statusCode === 201){
+      var lastStatusCode = body.lastStatusCode;
+      var new_status = null;
+      if(lastStatusCode != null){
+         new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+      } else {
+           new_status = new Status(body.userName, "GREEN", null);
+        }
+    var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
+      callback(null, new_user);
+    } else {
+      callback(body, null);
+    }
+		
 	});
 };
 
