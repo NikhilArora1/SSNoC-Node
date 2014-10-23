@@ -1,5 +1,5 @@
 var User = require('../models/UserRest');
-var Status = require('../models/StatusRest');
+var Status = require('../models/StatusRest');                                                             
 
 module.exports = function(_, io, participants, passport, refreshAllUsers) {
   return {

@@ -4,11 +4,13 @@ var rest_api = require('../../config/rest_api');
 var util = require('../util');
 var Status = require('./StatusRest');
 
-function User(user_name, password, latest_status, new_user){
+function User(user_name, password, latest_status, accountStatus, privilegeLevel, new_user){
   this.local = {
     name : user_name,
     password : password,
     status : latest_status,
+    accountStatus : accountStatus,
+    privilegeLevel : privilegeLevel,
     new_user: new_user
   };
   this.setStatus = function(status){
@@ -51,7 +53,7 @@ User.getUser = function(user_name, callback) {
 			 } else {
   			 new_status = new Status(body.userName, "GREEN", null);
   		}
-      var user = new User(body.userName, body.password, new_status, false);
+      var user = new User(body.userName, null, new_status, body.accountStatus, body.privilegeLevel, false);
       callback(null, user);
       return;
     }
@@ -78,7 +80,7 @@ User.getUsers = function(username, callback) {
 			      } else {
   			       new_status = new Status(item.userName, "GREEN", null);
   			   }
-		        return new User(item.userName, null, new_status, false);
+		        return new User(item.userName, null, new_status, item.accountStatus, item.privilegeLevel, false);
 		      });
 
 		      users.sort(function(a,b) {
@@ -90,7 +92,7 @@ User.getUsers = function(username, callback) {
 		  callback(null,null);
 		}
 	})
-}
+};
 
 User.getAllUsers = function(callback) {
   request(rest_api.get_all_users, {json:true}, function(err, res, body) {
@@ -100,7 +102,14 @@ User.getAllUsers = function(callback) {
     }
     if (res.statusCode === 200) {
       var users = body.map(function(item, idx, arr){
-        return new User(item.userName, item.password, null, false);
+    	  var lastStatusCode = item.lastStatusCode;
+	      var new_status = null;
+	      if(lastStatusCode != null){
+	         new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+	      } else {
+		       new_status = new Status(item.userName, "GREEN", null);
+		   }
+        return new User(item.userName, null, new_status, item.accountStatus, item.privilegeLevel, false);
       });
 
       users.sort(function(a,b) {
@@ -136,13 +145,46 @@ User.saveNewUser = function(user_name, password, callback) {
       callback(res.body, null);
       return;
     }
-    var new_user = new User(body.userName, password, null, true);
+    var lastStatusCode = body.lastStatusCode;
+    var new_status = null;
+    if(lastStatusCode != null){
+       new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+    } else {
+       new_status = new Status(body.userName, "GREEN", null);
+   }
+    var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, true);
     callback(null, new_user);
     return;
   });
 };
 
-
+User.updateUser = function(user_name, password, accountStatus, privilegeLevel, callback) {
+	var options = {
+		url : rest_api.update_user(user_name),
+		body : {userName: user_name,
+				password: password,
+			    accountStatus : accountStatus,
+			    privilegeLevel : privilegeLevel,
+				},
+		json: true
+	};
+	
+	request.put(options, function(err, res, body) {
+		if (err) {
+			callback(err, null);
+			return;
+		}
+		var lastStatusCode = body.lastStatusCode;
+	    var new_status = null;
+			if(lastStatusCode != null){
+			   new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+			} else {
+	  			 new_status = new Status(body.userName, "GREEN", null);
+	  		}
+		var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
+	    callback(null, new_user);
+	});
+};
 
 // callback should be of the form
 // function(err, successful, failureReason)
@@ -177,6 +219,6 @@ User.authenticate = function(username, password, callback){
     }
     
   });
-}
+};
 
 module.exports = User;

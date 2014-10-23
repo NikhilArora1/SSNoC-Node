@@ -17,6 +17,10 @@ var RestAPI = {
   'get_unconnected_users' : host_url + '/usergroups/unconnected'
 };
 
+RestAPI.udpate_user = function(userName){
+	  return host_url + '/user/' + userName; 
+	}
+
 RestAPI.authenticate_user = function(userName){
   return host_url + '/user/' + userName + '/authenticate'
 }
