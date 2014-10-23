@@ -6,6 +6,8 @@ module.exports = function(app, _, io, participants, passport) {
   var messages_controller = require('./controllers/messages')(_, io, participants, passport);
   var memory_controller = require('./controllers/measureMemory')(_, io, participants, passport);
   var performance_controller = require('./controllers/MeasurePerformance')(_, io, participants, passport);
+  var sna_controller = require('./controllers/analyzeSocialNetwork')(_, io, participants, passport);
+
 
   var isTestRunning = function(req, res, next){
     if(performance_controller.isTestRunning()){
@@ -79,6 +81,9 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/systemMaintenance", function(req, res){
     res.send("System undergoing maintenance");
   });
+
+  // social network analysis
+  app.get("/analyze", isLoggedIn, sna_controller.getSocialNetworkAnalysis);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);

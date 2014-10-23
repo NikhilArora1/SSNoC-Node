@@ -13,7 +13,8 @@ var RestAPI = {
   'get_default_measurement' : host_url + '/memory',
   'get_latest_statuses' : host_url + '/statuscrumbs',
   'setup_performance' : host_url + '/performance/setup',
-  'teardown_performance' : host_url + '/performance/teardown'
+  'teardown_performance' : host_url + '/performance/teardown',
+  'get_unconnected_users' : host_url + '/usergroups/unconnected'
 };
 
 RestAPI.authenticate_user = function(userName){
@@ -46,6 +47,10 @@ RestAPI.retrieve_message = function(messageID){
 
 RestAPI.get_interval_measurement = function(timeWindow){
 	return host_url + '/memory/interval/' + timeWindow;
+}
+
+RestAPI.get_unconnected_users_with_interval = function(timeWindow){
+  return host_url + '/usergroups/unconnected/' + timeWindow;
 }
 
 module.exports = RestAPI;
