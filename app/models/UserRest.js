@@ -158,14 +158,10 @@ User.saveNewUser = function(user_name, password, callback) {
   });
 };
 
-User.updateUser = function(user_name, password, accountStatus, privilegeLevel, callback) {
+User.updateUser = function(user, userData, callback) {
 	var options = {
-		url : rest_api.update_user(user_name),
-		body : {userName: user_name,
-				password: password,
-			    accountStatus : accountStatus,
-			    privilegeLevel : privilegeLevel,
-				},
+		url : rest_api.update_user(user),
+		body : userData,
 		json: true
 	};
 	

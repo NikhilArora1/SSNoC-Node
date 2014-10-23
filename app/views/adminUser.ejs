@@ -5,6 +5,8 @@
 		<title>SSNoC SB4</title>
 		<link rel="stylesheet" href="/css/toastr.min.css"/>
 		<link rel="stylesheet" href="/css/ssnoc.css"/>
+		<link rel="stylesheet" href="/css/toastr.min.css"/>
+		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
 		<script type="text/javascript" src="/js/socket.io.min.js"></script>
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
@@ -14,68 +16,55 @@
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
 		<script>
-		// for select status: get the status of the current user and render into the tag
-			$.ajax({
-	      		url:  '/user',
-	      		type: 'GET',
-	      		dataType: 'json'
-	    	}).done(function(data) {
-	    		console.log(JSON.stringify(data)); //for test
-	      		statusCode= data.local.status.status;
-	      		console.log(JSON.stringify(statusCode));
-	      		selObj=document.getElementById("selectStatus");
-		    	statuses=["GREEN","YELLOW","RED"];	
-		    	displayStatuses=["OK","Help","Emergency"];
-		    	htmlStr="";
-		    	for(i=0;i<statuses.length;i++){
-		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
-		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
-		    	}
-		    	selObj.innerHTML=htmlStr;
-	      	});	
-	    //show public wall on document load	
 			$(document).ready(function(){
-				showPublicWall();
-				$("#pageSelector").val("publicWall");
+				$.ajax({
+		      		url:  '/user',
+		      		type: 'GET',
+		      		dataType: 'json'
+		    	}).done(function(data) {
+		    		console.log(JSON.stringify(data)); //for test
+		      		statusCode= data.local.status.status;
+		      		console.log(JSON.stringify(statusCode));
+		      		selObj=document.getElementById("selectStatus");
+			    	statuses=["GREEN","YELLOW","RED"];	
+			    	displayStatuses=["OK","Help","Emergency"];
+			    	htmlStr="";
+			    	for(i=0;i<statuses.length;i++){
+			    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+			    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+			    	}
+			    	selObj.innerHTML=htmlStr;
+		      	});
 			});
 		</script>
 		<script type="text/javascript">
-			function showPublicWall(){
-				$("#peopleDirectory").hide();
-				$("#chatBuddies").hide();
-				refreshPublicWall();
-				$("#publicWall").show();
+
+			function validateUserNameAndPassword() {
+			  if( $('#userName').val().trim().length != 0 && $('#userName').val().trim().length < 3 ){
+			    toastr.error("Username should be at least 3 characters long");
+			    return false;
+			  }
+			  
+			  if( $('#passwd').val().trim().length != 0 && $('#passwd').val().trim().length < 4 ){
+			    toastr.error("Password should be at least 4 characters long");
+			    return false;
+			  }
+
+			  return true;
 			}
 
-			function showPeopleDirectory(){
-				$("#publicWall").hide();
-				$("#chatBuddies").hide();
-				refreshPeopleDirectory();
-				$("#peopleDirectory").show();
-			}
+		 	function verify(){
+		 		if(!validateUserNameAndPassword()){
+		 			return false;
+		 		}
 
-			function showPrivateChat(){
-				$("#publicWall").hide();
-				$("#peopleDirectory").hide();
-				refreshChatBuddies();
-				$("#chatBuddies").show();
-			}
+		 		return true;
+		 	}
 
-			function selectPage(selObj){
-				content=selObj.options[selObj.selectedIndex].value;
-				if(content==="publicWall"){
-					showPublicWall();
-				} else if(content==="peopleDirectory"){
-					showPeopleDirectory();
-				} else if(content==="privateChat"){
-					showPrivateChat();
-				}
-			}
 
 			function cancel(){
 				document.getElementById("profileForm").reset();
 			}
-
 		</script>
 	</head>
 
@@ -90,26 +79,33 @@
 		</div>
 
 		<div id="content" class="content">
+			<% if(message.length > 0) { %>
+				<h2><%=message%></h2>
+			<% } %>
+			<% if(errorMessage.length > 0) { %>
+				<h2><%=errorMessage%></h2>
+			<% } %>
 			<div id="profile" class="shortBar">
 				<form id="profileForm" action="/updateProfile" method="POST" >
+					<input type="hidden" name="originalUsername" value="<%=username%>"/>
 					User Name:
-					<input type="text" name="username" placeholder="<%=username%>"/><br/>
+					<input id="userName" type="text" name="username" value="<%=username%>"/><br/>
 					Password:
-					<input type="text" name="password" placeholder="<%=password%>"/><br/>
+					<input id="passwd" type="text" name="password" value=""/><br/>
 					Privilege Level:
 					<select name="privilegeLevel">
-						<option value="citizen" <% if(privilegeLevel==="citizen"){ %> selected="selected" <% } %> >Citizen</option>
-						<option value="coordinator" <% if(privilegeLevel==="coordinator"){ %> selected="selected" <% } %> >Coordinator</option>
-						<option value="monitor" <% if(privilegeLevel==="monitor"){ %> selected="selected" <% } %> >Monitor</option>
-						<option value="administrator" <% if(privilegeLevel==="accountStatus"){ %> selected="selected" <% } %> >Administrator</option>
+						<option value="Citizen" <% if(privilegeLevel==="Citizen"){ %> selected="selected" <% } %> >Citizen</option>
+						<option value="Coordinator" <% if(privilegeLevel==="Coordinator"){ %> selected="selected" <% } %> >Coordinator</option>
+						<option value="Monitor" <% if(privilegeLevel==="Monitor"){ %> selected="selected" <% } %> >Monitor</option>
+						<option value="Administrator" <% if(privilegeLevel==="Administrator"){ %> selected="selected" <% } %> >Administrator</option>
 					</select></br>
 					Account Status:
 					<select name="accountStatus">
-						<option value="active" <% if(accountStatus==="active"){ %> selected="selected" <% } %>  >Active</option>
-						<option value="inactive" <% if(accountStatus==="inactive"){ %> selected="selected" <% } %> >Inactive</option>
+						<option value="Active" <% if(accountStatus==="Active"){ %> selected="selected" <% } %>  >Active</option>
+						<option value="Inactive" <% if(accountStatus==="Inactive"){ %> selected="selected" <% } %> >Inactive</option>
 					</select></br>
 					<input type="button" onclick="cancel()" value="Cancel"/>
-					<input type="submit" value="Save"/>
+					<input type="submit" onclick="verify()" value="Save"/>
 				</form>
 			</div>
 			

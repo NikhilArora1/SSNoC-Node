@@ -155,7 +155,7 @@ function startPrivateChat(user){
 }
 
 function adminProfile(user){
-    var url = "/updateProfile?name=" + user;
+    var url = "/adminProfile?name=" + user;
     console.log('satrting admin profile of '+ user);
     window.location = url;
 }

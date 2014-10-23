@@ -18,7 +18,9 @@ module.exports = function(app, _, io, participants, passport) {
     next();
   }
 
-  app.get("/", isTestRunning, user_controller.getJoinCommunity);
+  app.get("/", isTestRunning, isLoggedIn, function(req, res){
+    res.redirect("/home");
+  });
   app.get("/home", isTestRunning, isLoggedIn, function(req, res){
     User.getUsers(null, function(err, users){
       if (!err && users !== null) {
@@ -87,8 +89,8 @@ module.exports = function(app, _, io, participants, passport) {
   app.get("/analyze", isLoggedIn, sna_controller.getSocialNetworkAnalysis);
   
   // administer profile routes
-  app.get("/loadUser", isLoggedIn, ap_controller.loadUser);
-  app.post("/updateUser", isLoggedIn, ap_controller.updateUser);
+  app.get("/adminProfile", isLoggedIn, ap_controller.loadUser);
+  app.post("/updateProfile", isLoggedIn, ap_controller.updateUser);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
@@ -107,7 +109,7 @@ function isLoggedIn(req, res, next) {
   if (req.isAuthenticated())
     return next();
 
-  res.redirect('/');
+  res.redirect('/joinCommunity');
 }
 
 function refreshAllUsers(participants, callback) {
