@@ -89,6 +89,10 @@ module.exports = function(app, _, io, participants, passport) {
   // administer profile routes
   app.get("/loadUser", isLoggedIn, ap_controller.loadUser);
   app.post("/updateUser", isLoggedIn, ap_controller.updateUser);
+  
+  //post announcement routes
+  app.get("/announcements", isLoggedIn, messages_controller.getAnnouncements);
+  app.post("/announcement", isLoggedIn, messages_controller.postAnnouncement);
 
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);

@@ -14,7 +14,9 @@ var RestAPI = {
   'get_latest_statuses' : host_url + '/statuscrumbs',
   'setup_performance' : host_url + '/performance/setup',
   'teardown_performance' : host_url + '/performance/teardown',
-  'get_unconnected_users' : host_url + '/usergroups/unconnected'
+  'get_unconnected_users' : host_url + '/usergroups/unconnected',
+  'post_announcement' : host_url + '/message/announcement',
+  'get_announcements' : host_url + '/messages/announcement'
 };
 
 RestAPI.udpate_user = function(userName){
