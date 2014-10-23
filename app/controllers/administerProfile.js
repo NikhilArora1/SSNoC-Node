@@ -11,7 +11,7 @@ module.exports = function(_, io, participants, passport, refreshAllUsers){
 			});
 		},
 		
-		modifyUser : function(req, res) {
+		updateUser : function(req, res) {
 			var user_name = req.session.passport.user.user_name;
 			User.updateUser(user_name, password, accountStatus, privilegeLevel, function(err, user) {
 				if(err){

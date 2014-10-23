@@ -80,7 +80,7 @@ User.getUsers = function(username, callback) {
 			      } else {
   			       new_status = new Status(item.userName, "GREEN", null);
   			   }
-		        return new User(item.userName, null, new_status, body.accountStatus, body.privilegeLevel, false);
+		        return new User(item.userName, null, new_status, item.accountStatus, item.privilegeLevel, false);
 		      });
 
 		      users.sort(function(a,b) {
@@ -109,7 +109,7 @@ User.getAllUsers = function(callback) {
 	      } else {
 		       new_status = new Status(item.userName, "GREEN", null);
 		   }
-        return new User(item.userName, null, new_status, body.accountStatus, body.privilegeLevel, false);
+        return new User(item.userName, null, new_status, item.accountStatus, item.privilegeLevel, false);
       });
 
       users.sort(function(a,b) {
@@ -145,7 +145,6 @@ User.saveNewUser = function(user_name, password, callback) {
       callback(res.body, null);
       return;
     }
-    var users = body.map(function(item, idx, arr){
     var lastStatusCode = item.lastStatusCode;
     var new_status = null;
     if(lastStatusCode != null){
@@ -153,8 +152,7 @@ User.saveNewUser = function(user_name, password, callback) {
     } else {
        new_status = new Status(item.userName, "GREEN", null);
    }
-    var new_user = new User(body.userName, item.password, new_status, item.accountStatus, item.privilegeLevel, true);
-    });
+    var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, true);
     callback(null, new_user);
     return;
   });
