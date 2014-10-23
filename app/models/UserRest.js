@@ -145,12 +145,12 @@ User.saveNewUser = function(user_name, password, callback) {
       callback(res.body, null);
       return;
     }
-    var lastStatusCode = item.lastStatusCode;
+    var lastStatusCode = body.lastStatusCode;
     var new_status = null;
     if(lastStatusCode != null){
-       new_status = new Status(item.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+       new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
     } else {
-       new_status = new Status(item.userName, "GREEN", null);
+       new_status = new Status(body.userName, "GREEN", null);
    }
     var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, true);
     callback(null, new_user);
