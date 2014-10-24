@@ -105,7 +105,6 @@ module.exports = function(app, _, io, participants, passport) {
   
   //post announcement routes
   app.get("/announcements", isLoggedIn, isActive, messages_controller.getAnnouncements);
-  app.post("/announcement", isLoggedIn, isActive, messages_controller.postAnnouncement);
   
   //administer profile routes
   app.get("/adminProfile", isLoggedIn, isActive, ap_controller.loadUser);
