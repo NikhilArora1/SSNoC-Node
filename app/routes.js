@@ -17,9 +17,22 @@ module.exports = function(app, _, io, participants, passport) {
     }
     next();
   }
-
-  app.get("/", isTestRunning, user_controller.getJoinCommunity);
-  app.get("/home", isTestRunning, isLoggedIn, function(req, res){
+  
+  var isActive = function(req, res, next){
+	    if(User.accountStatus == "Active"){
+	    	next();
+	    }
+	    else{
+	    	res.redirct("/Inactive");
+	    	return;
+	    }
+	  }
+  
+  
+  app.get("/", isTestRunning, isLoggedIn, isActive, function(req, res){
+    res.redirect("/home");
+  });
+  app.get("/home", isTestRunning, isLoggedIn, isActive, function(req, res){
     User.getUsers(null, function(err, users){
       if (!err && users !== null) {
         participants.all = [];
@@ -32,30 +45,30 @@ module.exports = function(app, _, io, participants, passport) {
       }
     });
   });
-  app.get("/joinCommunity", isTestRunning, user_controller.getJoinCommunity);
-  app.post("/joinCommunity", user_controller.postJoinCommunity);
+  app.get("/joinCommunity", isTestRunning, isActive, user_controller.getJoinCommunity);
+  app.post("/joinCommunity", isActive, user_controller.postJoinCommunity);
 
-  app.get("/WelcomePage", isTestRunning, isLoggedIn, user_controller.getWelcomePage);
+  app.get("/WelcomePage", isTestRunning, isLoggedIn, isActive, user_controller.getWelcomePage);
   
-  app.get("/people1", isTestRunning, isLoggedIn, user_controller.getPeoplePage);
-  app.get("/poster", isTestRunning, isLoggedIn, function(req, res){
+  app.get("/people1", isTestRunning, isLoggedIn, isActive, user_controller.getPeoplePage);
+  app.get("/poster", isTestRunning, isLoggedIn, isActive, function(req, res){
     res.render("poster");
   });
-  app.get("/logout", isLoggedIn, user_controller.getLogout);
-  app.get("/publicWall", isTestRunning, isLoggedIn, function(req, res){
+  app.get("/logout", isLoggedIn, isActive, user_controller.getLogout);
+  app.get("/publicWall", isTestRunning, isLoggedIn, isActive, function(req, res){
     res.render("publicWall");
   });
-  app.get("/privateChat", isTestRunning, isLoggedIn, function(req, res){
+  app.get("/privateChat", isTestRunning, isLoggedIn, isActive, function(req, res){
     console.log("private chat with: " + req.query.name);
     res.render("privateChat", {buddyName: req.query.name});
   });
   
-  app.post("/status", user_controller.postPeoplePage);
+  app.post("/status", isActive, user_controller.postPeoplePage);
 
   // data routes
-  app.get("/user", isLoggedIn, user_controller.getUser);
-  app.get("/wall", isLoggedIn, messages_controller.getWallContents);
-  app.get("/participants", isLoggedIn, function(req, res){
+  app.get("/user", isLoggedIn, isActive, user_controller.getUser);
+  app.get("/wall", isLoggedIn, isActive, messages_controller.getWallContents);
+  app.get("/participants", isLoggedIn, isActive, function(req, res){
     User.getUsers(null, function(err, users){
       if (!err && users !== null) {
         participants.all = [];
@@ -66,34 +79,41 @@ module.exports = function(app, _, io, participants, passport) {
       res.json(200, participants);
     });
   });
-  app.get("/chatBuddies", isLoggedIn, messages_controller.getChatBuddies);
-  app.get("/privateMessages", isLoggedIn, messages_controller.getPrivateMessages);
+  app.get("/chatBuddies", isLoggedIn, isActive, messages_controller.getChatBuddies);
+  app.get("/privateMessages", isLoggedIn, isActive, messages_controller.getPrivateMessages);
 
   // measure memory routes
-  app.post("/memory/start", isLoggedIn, memory_controller.postStartMemoryProfile);
-  app.post("/memory/stop", isLoggedIn, memory_controller.postStopMemoryProfile);
-  app.post("/memory/delete", isLoggedIn, memory_controller.postDeleteMemoryProfile);
-  app.get("/memory", isLoggedIn, memory_controller.getMemoryProfile);
+  app.post("/memory/start", isLoggedIn, isActive, memory_controller.postStartMemoryProfile);
+  app.post("/memory/stop", isLoggedIn, isActive, memory_controller.postStopMemoryProfile);
+  app.post("/memory/delete", isLoggedIn, isActive, memory_controller.postDeleteMemoryProfile);
+  app.get("/memory", isLoggedIn, isActive, memory_controller.getMemoryProfile);
 
   // measure performance routes
-  app.get("/performance", isLoggedIn, performance_controller.getPerformancePage);
-  app.post("/performance/start", isLoggedIn, performance_controller.startPerformanceTests);
-  app.post("/performance/stop", isLoggedIn, performance_controller.endPerformanceTests);
+  app.get("/performance", isLoggedIn, isActive, performance_controller.getPerformancePage);
+  app.post("/performance/start", isLoggedIn, isActive, performance_controller.startPerformanceTests);
+  app.post("/performance/stop", isLoggedIn, isActive, performance_controller.endPerformanceTests);
   app.get("/systemMaintenance", function(req, res){
     res.send("System undergoing maintenance");
   });
 
   // social network analysis
-  app.get("/analyze", isLoggedIn, sna_controller.getSocialNetworkAnalysis);
+  app.get("/analyze", isLoggedIn, isActive, sna_controller.getSocialNetworkAnalysis);
   
   // administer profile routes
-  app.get("/loadUser", isLoggedIn, ap_controller.loadUser);
-  app.post("/updateUser", isLoggedIn, ap_controller.updateUser);
+  app.get("/loadUser", isLoggedIn, isActive, ap_controller.loadUser);
+  app.post("/updateUser", isLoggedIn, isActive, ap_controller.updateUser);
   
   //post announcement routes
-  app.get("/announcements", isLoggedIn, messages_controller.getAnnouncements);
-  app.post("/announcement", isLoggedIn, messages_controller.postAnnouncement);
+  app.get("/announcements", isLoggedIn, isActive, messages_controller.getAnnouncements);
+  app.post("/announcement", isLoggedIn, isActive, messages_controller.postAnnouncement);
+  
+  //administer profile routes
+  app.get("/adminProfile", isLoggedIn, isActive, ap_controller.loadUser);
+  app.post("/updateProfile", isLoggedIn, isActive, ap_controller.updateUser);
 
+  app.get("/Inactive", function(req, res){
+	    res.send("Access Not Allowed, Get out of here!!!!");
+  });
   // deprecated routes
   app.post("/signup", isLoggedIn, user_controller.postSignup);
   app.get("/welcome", isLoggedIn, user_controller.getWelcome);
@@ -105,13 +125,52 @@ module.exports = function(app, _, io, participants, passport) {
     failureFlash: true
   }));
 
-};
+	
+function isAdminstrator(req, res, next){
+	if (User.privilegeLevel == 'Administrator'){
+		next();
+	}
+	else{
+		res.redirct("/Inactive");
+		return;
+	}
+}
+
+function isCoordinator(req, res, next){
+	if (User.privilegeLevel == 'Coordinator'){
+		next();
+	}
+	else{
+		res.redirct("/Inactive");
+		return;
+	}
+}
+
+function isMonitor(req, res, next){
+	if (User.privilegeLevel == 'Monitor'){
+		next();
+	}
+	else{
+		res.redirct("/Inactive");
+		return;
+	}
+}
+
+function isCitizen(req, res, next){
+	if (User.privilegeLevel == 'Citizen'){
+		next();
+	}
+	else{
+		res.redirct("/Inactive");
+		return;
+	}
+}
 
 function isLoggedIn(req, res, next) {
   if (req.isAuthenticated())
     return next();
 
-  res.redirect('/');
+  res.redirect('/joinCommunity');
 }
 
 function refreshAllUsers(participants, callback) {
@@ -122,4 +181,5 @@ function refreshAllUsers(participants, callback) {
     });
     callback();
   });
+}
 }

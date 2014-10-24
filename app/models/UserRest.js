@@ -158,14 +158,10 @@ User.saveNewUser = function(user_name, password, callback) {
   });
 };
 
-User.updateUser = function(user_name, password, accountStatus, privilegeLevel, callback) {
+User.updateUser = function(user, userData, callback) {
 	var options = {
-		url : rest_api.update_user(user_name),
-		body : {userName: user_name,
-				password: password,
-			    accountStatus : accountStatus,
-			    privilegeLevel : privilegeLevel,
-				},
+		url : rest_api.update_user(user),
+		body : userData,
 		json: true
 	};
 	
@@ -173,16 +169,20 @@ User.updateUser = function(user_name, password, accountStatus, privilegeLevel, c
 		if (err) {
 			callback(err, null);
 			return;
-		}
-		var lastStatusCode = body.lastStatusCode;
-	    var new_status = null;
-			if(lastStatusCode != null){
-			   new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
-			} else {
-	  			 new_status = new Status(body.userName, "GREEN", null);
-	  		}
-		var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
-	    callback(null, new_user);
+		} else if(res.statusCode === 200 || res.statusCode === 201){
+      var lastStatusCode = body.lastStatusCode;
+      var new_status = null;
+      if(lastStatusCode != null){
+         new_status = new Status(body.userName, lastStatusCode.statusCode, lastStatusCode.updatedAt);
+      } else {
+           new_status = new Status(body.userName, "GREEN", null);
+        }
+    var new_user = new User(body.userName, body.password, new_status, body.accountStatus, body.privilegeLevel, false);
+      callback(null, new_user);
+    } else {
+      callback(body, null);
+    }
+		
 	});
 };
 

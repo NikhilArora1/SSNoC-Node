@@ -6,7 +6,7 @@ var RestAPI = {
   'get_user' : host_url + '/user/',
   'get_status' : host_url + '/status/userName/',
   'post_new_user' : host_url + '/user/signup',
-  'get_wall_messages' : host_url + '/messages/wall',
+  'get_wall_messages' : host_url + '/messages/wall/visible',
   'start_measurement' : host_url + '/memory/start',
   'stop_measurement' : host_url + '/memory/stop',
   'delete_memory' : host_url + '/memory',
@@ -16,10 +16,10 @@ var RestAPI = {
   'teardown_performance' : host_url + '/performance/teardown',
   'get_unconnected_users' : host_url + '/usergroups/unconnected',
   'post_announcement' : host_url + '/message/announcement',
-  'get_announcements' : host_url + '/messages/announcement'
+  'get_announcements' : host_url + '/messages/announcement/visible'
 };
 
-RestAPI.udpate_user = function(userName){
+RestAPI.update_user = function(userName){
 	  return host_url + '/user/' + userName; 
 	}
 
@@ -44,7 +44,7 @@ RestAPI.get_chat_messages = function(Username1, Username2){
 }
 
 RestAPI.get_users = function(userName){
-	return host_url + '/users/' + userName + '/chatbuddies' ;
+	return host_url + '/users/' + userName + '/chatbuddies/visible' ;
 }
 
 RestAPI.retrieve_message = function(messageID){
