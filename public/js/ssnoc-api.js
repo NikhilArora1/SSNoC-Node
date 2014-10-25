@@ -55,6 +55,9 @@ function updateParticipants(participants){
     	}
 
     	var $div = $("<div>").loadTemplate($('#people_directory_template'), user);
+        if(privilegeLevel==="Administrator"){
+            $div.find("#adminProfile").removeAttr("hidden");
+        }
         if(chatEnabled){
             $div.find("#launchPrivateChat").click(function(){
                 startPrivateChat(username);
