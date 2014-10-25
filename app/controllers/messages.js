@@ -78,6 +78,16 @@ module.exports = function(_, io, participants, passport) {
                 res.send("error: " + err);
             }
         });
+    },
+    announcements : function(req, res){
+    	var user_name=req.session.passport.user.user_name;
+    	MessageRest.getAnnouncements(function(err, messages){
+    		if(err === null){
+    			res.json(200, messages);
+    		} else {
+    			res.status(500).send('Server Error: ' + err);
+    		}
+    	});
     }
   };
 };

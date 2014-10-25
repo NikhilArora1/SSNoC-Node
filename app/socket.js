@@ -57,6 +57,19 @@ module.exports = function(_, io, participants) {
           io.sockets.in(msg.target).emit('newPrivateMessage', {message: msg});
         });
     });
-
+    
+    socket.on("postAnnouncement", function(data){
+        var username = data.username;
+        var message = data.message;
+        var timestamp = data.timestamp;
+        MessageRest.postWallMessage(username, message, timestamp, function(err, message){
+            if(err){
+              console.log("error posting announcement " + err);
+              return;
+            }
+            // assumption is that message is a full message object
+            io.sockets.emit('newAnnouncement', {message: message});
+        });
+    });
   });
 };

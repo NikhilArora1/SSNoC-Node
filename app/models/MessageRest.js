@@ -56,7 +56,7 @@ Message.getWallMessages=function(callback){
             return;
         }
     });
-}
+};
 
 Message.sendChatMessage=function(sendingusername, receivingusername, message, timestamp, callback) {
     var options = {
@@ -129,7 +129,7 @@ Message.getChatBuddies=function(username, callback){
 			      } else {
 			       new_status = new Status(item.userName, "GREEN", null);
 			   }
-		        return new User(item.userName, null, new_status, false);
+		        return new User(item.userName, null, new_status, null, null, false);
             });
             callback(null, users);
             return;
@@ -153,6 +153,54 @@ Message.retrieveMessage=function(messageID, callback){
               callback(null, message)
        
             
+            return;
+        }
+    });
+};
+
+Message.postAnnouncement=function(username, announcement, timestamp, callback) {
+    var options = {
+        url : rest_api.post_announcement,
+        body : {
+                content : announcement,
+                postedAt : timestamp
+            },
+        json: true
+    };
+    request.post(options, function(err, res, body) {
+        if (err){
+            callback(err,null);
+            return;
+        }
+        else
+        {
+            //console.log(body);
+            var message = new Message(body.author, null, body.content, body.postedAt);
+            callback(null, message);
+            return;
+        }
+    });
+};
+
+Message.getAnnouncements=function(callback){
+    var options = {
+        url : rest_api.get_announcements,
+        json: true
+    };
+    request.get(options, function(err, res, body){
+        if(err){
+            callback(err,null);
+            return;
+        }
+        else {
+            //console.log(body);
+            var messages = body.map(function(item, idx, arr){
+                return new Message(item.author, null, item.content, item.postedAt);
+            });
+            messages.sort(function(a,b) {
+                return a.postedAt > b.postedAt;
+            });
+            callback(null, messages);
             return;
         }
     });
