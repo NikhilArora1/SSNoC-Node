@@ -211,7 +211,7 @@ User.authenticate = function(username, password, callback){
     } else {
       var reason = "Unknown Error";
       if(res.statusCode === 401){
-        reason = "Username and password do not match."
+        reason = body;
       } else if(res.statusCode === 404){
         reason = "User does not exist.";
       }

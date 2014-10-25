@@ -28,7 +28,7 @@ module.exports = function(passport) {
         
         if(!success && failureReason.errorCode == 401){
           // user already exists
-          done(null, false, req.flash('joinMessage', 'Username already exists. Please enter a new username.'));
+          done(null, false, req.flash('joinMessage', failureReason.reason));
           return;
         }
         
