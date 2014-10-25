@@ -79,8 +79,7 @@ module.exports = function(_, io, participants, passport) {
             }
         });
     },
-    announcements : function(req, res){
-    	var user_name=req.session.passport.user.user_name;
+    getAnnouncements : function(req, res){
     	MessageRest.getAnnouncements(function(err, messages){
     		if(err === null){
     			res.json(200, messages);

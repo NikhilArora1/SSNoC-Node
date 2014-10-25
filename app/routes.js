@@ -19,6 +19,7 @@ module.exports = function(app, _, io, participants, passport) {
   }
   
   var isActive = function(req, res, next){
+    next();
 	    if(User.accountStatus == "Active"){
 	    	next();
 	    }

@@ -16,7 +16,7 @@ var RestAPI = {
   'teardown_performance' : host_url + '/performance/teardown',
   'get_unconnected_users' : host_url + '/usergroups/unconnected',
   'post_announcement' : host_url + '/message/announcement',
-  'get_announcements' : host_url + '/messages/announcement/visible'
+  'get_announcements' : host_url + '/messages/announcement'
 };
 
 RestAPI.update_user = function(userName){

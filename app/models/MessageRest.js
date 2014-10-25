@@ -162,6 +162,7 @@ Message.postAnnouncement=function(username, announcement, timestamp, callback) {
     var options = {
         url : rest_api.post_announcement,
         body : {
+                author: username,
                 content : announcement,
                 postedAt : timestamp
             },
@@ -198,7 +199,9 @@ Message.getAnnouncements=function(callback){
                 return new Message(item.author, null, item.content, item.postedAt);
             });
             messages.sort(function(a,b) {
-                return a.postedAt > b.postedAt;
+                var d1 = new Date(a.postedAt);
+                var d2 = new Date(b.postedAt);
+                return d1-d2;
             });
             callback(null, messages);
             return;

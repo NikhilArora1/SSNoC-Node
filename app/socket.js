@@ -62,7 +62,7 @@ module.exports = function(_, io, participants) {
         var username = data.username;
         var message = data.message;
         var timestamp = data.timestamp;
-        MessageRest.postWallMessage(username, message, timestamp, function(err, message){
+        MessageRest.postAnnouncement(username, message, timestamp, function(err, message){
             if(err){
               console.log("error posting announcement " + err);
               return;
