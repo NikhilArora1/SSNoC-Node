@@ -35,6 +35,10 @@ function init(){
 		addNewWallMessage($("#messages"), data);
 	});
 
+	socket.on('newAnnouncement',function(data){
+		addNewPublicAnnouncement($("#announcements"),data)
+	});
+
 	socket.on('newStatusMessage', function(data){
 		console.log("new status message: " + JSON.stringify(data) );
 		addNewStatusMessage($("#messages"), data);
@@ -45,6 +49,12 @@ function init(){
 		var text = $("#wallMessage").val();
 		socket.emit('postWallMessage', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
 		$("#wallMessage").val("");
+	});
+
+	$("#submitPublicAnnouncement").click(function(){
+		var text = $("#announcement").val();
+		socket.emit('postAnnouncement', {username: userName, message: text, timestamp: new Date().toString('yyyy-MM-dd HH:mm')});
+		$("#announcement").val("");
 	});
 
 	$("#selectStatus").change(function(){
