@@ -19,15 +19,18 @@ module.exports = function(app, _, io, participants, passport) {
   }
   
   var isActive = function(req, res, next){
-    next();
-	    if(User.accountStatus == "Active"){
-	    	next();
-	    }
-	    else{
-	    	res.redirct("/Inactive");
-	    	return;
-	    }
-	  }
+    var user_name = req.session.passport.user.user_name;
+    User.getUser(user_name, function(err, user) {
+      if (user !== null && user.local.accountStatus == "Active") {
+        next();
+        return;
+      } else {
+        res.redirect("/Inactive");
+        return;
+      }
+
+    });
+	 }
   
   
   app.get("/", isTestRunning, isLoggedIn, isActive, function(req, res){
@@ -46,8 +49,8 @@ module.exports = function(app, _, io, participants, passport) {
       }
     });
   });
-  app.get("/joinCommunity", isTestRunning, isActive, user_controller.getJoinCommunity);
-  app.post("/joinCommunity", isActive, user_controller.postJoinCommunity);
+  app.get("/joinCommunity", isTestRunning, user_controller.getJoinCommunity);
+  app.post("/joinCommunity", user_controller.postJoinCommunity);
 
   app.get("/WelcomePage", isTestRunning, isLoggedIn, isActive, user_controller.getWelcomePage);
   

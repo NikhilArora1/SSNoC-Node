@@ -110,7 +110,7 @@ function refreshAnnouncements(){
             var wall = $("#announcements");
             wall.html('');
             data.forEach(function(announcement){
-               addNewPublicAnnouncement(wall, {announcement: announcement}); 
+               addNewPublicAnnouncement(wall, {message: announcement}); 
             })
         });
 }
@@ -136,7 +136,7 @@ function addNewWallMessage(wall, data){
 }
 
 function addNewPublicAnnouncement(wall, data){
-    var $div = $("<div>").loadTemplate($("#public_announcement_template"), data.announcement);
+    var $div = $("<div>").loadTemplate($("#public_announcement_template"), data.message);
     wall.prepend($div);
 }
 

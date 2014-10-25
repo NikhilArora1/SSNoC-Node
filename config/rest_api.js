@@ -6,7 +6,7 @@ var RestAPI = {
   'get_user' : host_url + '/user/',
   'get_status' : host_url + '/status/userName/',
   'post_new_user' : host_url + '/user/signup',
-  'get_wall_messages' : host_url + '/messages/wall/visible',
+  'get_wall_messages' : host_url + '/messages/wall',
   'start_measurement' : host_url + '/memory/start',
   'stop_measurement' : host_url + '/memory/stop',
   'delete_memory' : host_url + '/memory',
@@ -44,7 +44,7 @@ RestAPI.get_chat_messages = function(Username1, Username2){
 }
 
 RestAPI.get_users = function(userName){
-	return host_url + '/users/' + userName + '/chatbuddies/visible' ;
+	return host_url + '/users/' + userName + '/chatbuddies' ;
 }
 
 RestAPI.retrieve_message = function(messageID){
