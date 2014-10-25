@@ -66,6 +66,9 @@
 		float: right;
 		margin-top: 2em;
 	}
+	#goToMeasureMemoryForm{
+		clear: right;
+	}
 
 	select {
 		color:green;
@@ -140,6 +143,7 @@
 */	table.content {width:95%;background-color:#F5F5F5;padding:1%;margin:1% 2% 0% 2%;border:1px solid #DCDCDC} 
 	
 	input[type=submit]{color:green;background-color:#F5F5F5}
+	input[type=button]{color:green;background-color:#F5F5F5}
 	
 	form.message {color:green;background-color:#F5F5F5;}
 	tr {font-size:1.1em;color:green}

@@ -29,24 +29,26 @@
 			    	}).done();	
                 }
             /************ for selecting status *****/
-                $.ajax({
-                url:  '/user',
-                type: 'GET',
-                dataType: 'json'
-            }).done(function(data) {
-                console.log(JSON.stringify(data)); //for test
-                statusCode= data.local.status.status;
-                console.log(JSON.stringify(statusCode));
-                selObj=document.getElementById("selectStatus");
-                statuses=["GREEN","YELLOW","RED"];  
-                displayStatuses=["OK","Help","Emergency"];
-                htmlStr="";
-                for(i=0;i<statuses.length;i++){
-                    if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
-                    else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
-                }
-                selObj.innerHTML=htmlStr;
-            }); 
+                $(document).ready(function(){
+                    $.ajax({
+                        url:  '/user',
+                        type: 'GET',
+                        dataType: 'json'
+                    }).done(function(data) {
+                        console.log(JSON.stringify(data)); //for test
+                        statusCode= data.local.status.status;
+                        console.log(JSON.stringify(statusCode));
+                        selObj=document.getElementById("selectStatus");
+                        statuses=["GREEN","YELLOW","RED"];  
+                        displayStatuses=["OK","Help","Emergency"];
+                        htmlStr="";
+                        for(i=0;i<statuses.length;i++){
+                            if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+                            else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+                        }
+                        selObj.innerHTML=htmlStr;
+                    });
+                });
             </script>
             <script type="text/javascript">
             	$(document).ready(function(){
@@ -63,12 +65,15 @@
         </head>
         <body>
             <div id="header" class="header">
-                <h3 class="head" id="username">Measure Performance</h3>
-                <form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
-                <form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
-                <select id="selectStatus" class="selectStatus">
-                </select>
-            </div>
+            <h3 class="head" id="username"></h3>
+            <form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+            <form class="goTo" action="/"><input type="submit" value="Home"></form>
+            <form id="goToMeasureMemoryForm" class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+            <form class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
+            <form class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
+            <select id="selectStatus" class="selectStatus">
+            </select>
+        </div>
            	<table class="head"> 
 				<tr>
 					<td>

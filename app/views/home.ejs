@@ -15,26 +15,26 @@
 		<script type="text/javascript" src="/js/socket-api.js"></script>
 		<script>
 		// for select status: get the status of the current user and render into the tag
-			$.ajax({
-	      		url:  '/user',
-	      		type: 'GET',
-	      		dataType: 'json'
-	    	}).done(function(data) {
-	    		console.log(JSON.stringify(data)); //for test
-	      		statusCode= data.local.status.status;
-	      		console.log(JSON.stringify(statusCode));
-	      		selObj=document.getElementById("selectStatus");
-		    	statuses=["GREEN","YELLOW","RED"];	
-		    	displayStatuses=["OK","Help","Emergency"];
-		    	htmlStr="";
-		    	for(i=0;i<statuses.length;i++){
-		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
-		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
-		    	}
-		    	selObj.innerHTML=htmlStr;
-	      	});	
-
-
+			$(document).ready(function(){
+				$.ajax({
+		      		url:  '/user',
+		      		type: 'GET',
+		      		dataType: 'json'
+		    	}).done(function(data) {
+		    		console.log(JSON.stringify(data)); //for test
+		      		statusCode= data.local.status.status;
+		      		console.log(JSON.stringify(statusCode));
+		      		selObj=document.getElementById("selectStatus");
+			    	statuses=["GREEN","YELLOW","RED"];	
+			    	displayStatuses=["OK","Help","Emergency"];
+			    	htmlStr="";
+			    	for(i=0;i<statuses.length;i++){
+			    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+			    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+			    	}
+			    	selObj.innerHTML=htmlStr;
+		      	});	
+		    });
 		// show public wall on document load
 			$(document).ready(function(){
 				showPublicWall();
@@ -45,6 +45,7 @@
 			function showPublicWall(){
 				$("#peopleDirectory").hide();
 				$("#chatBuddies").hide();
+				$("#publicAnnouncement").hide();
 				refreshPublicWall();
 				$("#publicWall").show();
 			}
@@ -52,6 +53,7 @@
 			function showPeopleDirectory(){
 				$("#publicWall").hide();
 				$("#chatBuddies").hide();
+				$("#publicAnnouncement").hide();
 				refreshPeopleDirectory();
 				$("#peopleDirectory").show();
 			}
@@ -59,8 +61,17 @@
 			function showPrivateChat(){
 				$("#publicWall").hide();
 				$("#peopleDirectory").hide();
+				$("#publicAnnouncement").hide();
 				refreshChatBuddies();
 				$("#chatBuddies").show();
+			}
+
+			function showPublicAnnouncement(){
+				$("#publicWall").hide();
+				$("#peopleDirectory").hide();
+				$("#chatBuddies").hide();
+				$("#publicAnnouncement").show();
+				refreshAnnouncements();
 			}
 
 			function selectPage(selObj){
@@ -71,6 +82,8 @@
 					showPeopleDirectory();
 				} else if(content==="privateChat"){
 					showPrivateChat();
+				} else if(content==="publicAnnouncement"){
+					showPublicAnnouncement();
 				}
 			}
 
@@ -81,7 +94,8 @@
 		<div id="header" class="header">
 			<h3 class="head" id="username"></h3>
 			<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
-			<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+			<form class="goTo" action="/"><input type="submit" value="Home"></form>
+			<form id="goToMeasureMemoryForm" class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
 			<form class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
 			<form class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
 			<select id="selectStatus" class="selectStatus">
@@ -93,6 +107,7 @@
         			<option value="publicWall">Public Wall</option>
         			<option value="peopleDirectory">People Directory</option>
         			<option value="privateChat">Private Chat</option>
+        			<option value="publicAnnouncement">Public Announcement</option>
         		</select>
         	</form>
 		</div>
@@ -103,6 +118,14 @@
 					<button id="submitWallMessage">Submit Wall Message</button>
 				</div>
 				<div id="messages">
+				</div>
+			</div>
+			<div id="publicAnnouncement">
+				<div id="postPublicAnnouncementBar" class="longBar">
+					<input id="announcement" type="text" name="announcement"/>
+					<button id="submitPublicAnnouncement">Post Announcement</button>
+				</div>
+				<div id="announcements">
 				</div>
 			</div>
 			<div id="peopleDirectory">
@@ -143,6 +166,14 @@
             </div>
         </script>
         <script type="text/html" id="wall_message_template">
+            <div  class="shortBar">
+                <h5 class="username" data-content="author"></h5>
+                <span class="timestamp" data-content="postedAt"></span>
+                <p class="messageText" data-content="content" >
+                </p>
+			</div>
+        </script>
+        <script type="text/html" id="public_announcement_template">
             <div  class="shortBar">
                 <h5 class="username" data-content="author"></h5>
                 <span class="timestamp" data-content="postedAt"></span>

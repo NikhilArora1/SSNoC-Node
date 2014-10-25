@@ -101,6 +101,20 @@ function refreshPublicWall(){
         });
 }
 
+function refreshAnnouncements(){
+    $.ajax({
+            url:  '/announcements',
+            type: 'GET',
+            dataType: 'json'
+        }).done(function(data) {
+            var wall = $("#announcements");
+            wall.html('');
+            data.forEach(function(announcement){
+               addNewPublicAnnouncement(wall, {announcement: announcement}); 
+            })
+        });
+}
+
 function refreshChatBuddies(){
     $.ajax({
         url: '/chatBuddies',
@@ -118,6 +132,11 @@ function refreshChatBuddies(){
 
 function addNewWallMessage(wall, data){
     var $div = $("<div>").loadTemplate($("#wall_message_template"), data.message);
+    wall.prepend($div);
+}
+
+function addNewPublicAnnouncement(wall, data){
+    var $div = $("<div>").loadTemplate($("#public_announcement_template"), data.announcement);
     wall.prepend($div);
 }
 
