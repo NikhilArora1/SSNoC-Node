@@ -21,9 +21,21 @@
 		      		type: 'GET',
 		      		dataType: 'json'
 		    	}).done(function(data) {
-		    		console.log(JSON.stringify(data)); //for test
+		    		//console.log(JSON.stringify(data)); //for test
 		      		statusCode= data.local.status.status;
-		      		console.log(JSON.stringify(statusCode));
+		      		privilegeLevel=data.local.privilegeLevel;
+		      		console.log(privilegeLevel);
+		      		//check for privilegeLevel
+					if(privilegeLevel==="Monitor"||privilegeLevel==="Administrator"){
+						$("#goToMeasureMemoryForm").removeAttr("hidden");
+						$("#goToMeasurePerformanceForm").removeAttr("hidden");
+					}
+					if(privilegeLevel==="Coordinator"||privilegeLevel==="Administrator"){
+						$("#goToAnalyzeForm").removeAttr("hidden");
+						$("#postPublicAnnouncementBar").removeAttr("hidden");
+					}
+
+			      	//console.log(JSON.stringify(statusCode));
 		      		selObj=document.getElementById("selectStatus");
 			    	statuses=["GREEN","YELLOW","RED"];	
 			    	displayStatuses=["OK","Help","Emergency"];
@@ -34,12 +46,11 @@
 			    	}
 			    	selObj.innerHTML=htmlStr;
 		      	});	
-		    });
-		// show public wall on document load
-			$(document).ready(function(){
+		      	//show public wall on page load
 				showPublicWall();
 				$("#pageSelector").val("publicWall");
-			});
+		    });
+
 		</script>
 		<script type="text/javascript">
 			function showPublicWall(){
@@ -93,11 +104,11 @@
 	<body>
 		<div id="header" class="header">
 			<h3 class="head" id="username"></h3>
-			<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
-			<form class="goTo" action="/"><input type="submit" value="Home"></form>
-			<form id="goToMeasureMemoryForm" class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
-			<form class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
-			<form class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
+			<form id="logoutForm" class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+			<form id="goHomeForm" class="goTo" action="/"><input type="submit" value="Home"></form>
+			<form hidden="hidden" id="goToMeasureMemoryForm" class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+			<form hidden="hidden" id="goToMeasurePerformanceForm" class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
+			<form hidden="hidden" id="goToAnalyzeForm" class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
 			<select id="selectStatus" class="selectStatus">
 			</select>
 		</div>
@@ -121,7 +132,7 @@
 				</div>
 			</div>
 			<div id="publicAnnouncement">
-				<div id="postPublicAnnouncementBar" class="longBar">
+				<div hidden="hidden" id="postPublicAnnouncementBar" class="longBar">
 					<input id="announcement" type="text" name="announcement"/>
 					<button id="submitPublicAnnouncement">Post Announcement</button>
 				</div>
@@ -161,7 +172,7 @@
 	                </p>
 	            </div>
                 <button type="button" id="launchPrivateChat" class="launchPrivateChat">Private Chat</button>
-                <button type="button" id="adminProfile" class="adminProfile">Administer Profile</button>
+                <button type="button" hidden="hidden" id="adminProfile" class="adminProfile">Administer Profile</button>
                 <div class="placeHolder">placeHolder</div>
             </div>
         </script>
