@@ -32,7 +32,7 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		addNewWallMessage($("#messages"), data);
+		wallMessageReceived($("#messages"), data);
 	});
 
 	socket.on('newAnnouncement',function(data){
@@ -41,7 +41,7 @@ function init(){
 
 	socket.on('newStatusMessage', function(data){
 		console.log("new status message: " + JSON.stringify(data) );
-		addNewStatusMessage($("#messages"), data);
+		statusMessageReceived($("#messages"), data);
 		refreshPeopleDirectory();
 	});
 

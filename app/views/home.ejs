@@ -10,6 +10,7 @@
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/js/date.js"></script>
+		<script type="text/javascript" src="/js/filter.js"></script>
 		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
@@ -49,11 +50,25 @@
 		      	//show public wall on page load
 				showPublicWall();
 				$("#pageSelector").val("publicWall");
+
+				$("#loadMoreMessagesBtn").click(function(){
+					loadMoreWallMessages($("#messages"));
+				});
+
+				$("#wallMessageSearchBtn").click(function(){
+					refreshPublicWall($("#wallMessageSearchFilter").val());
+				});
+
+				$("#wallMessageClearBtn").click(function(){
+					$("#wallMessageSearchFilter").val('');
+					refreshPublicWall();
+				});
 		    });
 
 		</script>
 		<script type="text/javascript">
 			function showPublicWall(){
+				$("#wallMessageSearchFilter").val('');
 				$("#peopleDirectory").hide();
 				$("#chatBuddies").hide();
 				$("#publicAnnouncement").hide();
@@ -127,8 +142,17 @@
 				<div id="submitMessageBar" class="longBar">
 					<input id="wallMessage" type="text" name="message"/>
 					<button id="submitWallMessage">Submit Wall Message</button>
+					<input id="wallMessageSearchFilter" type="text" />
+					<button id="wallMessageSearchBtn">Search</button>
+					<button id="wallMessageClearBtn">Clear</button>
+				</div>
+				<div id="noMessagesBar" class="longBar" style="display:none">
+					No messages found.
 				</div>
 				<div id="messages">
+				</div>
+				<div id="loadMoreMessages" class="longBar">
+					<button id="loadMoreMessagesBtn">Load More</button>
 				</div>
 			</div>
 			<div id="publicAnnouncement">
