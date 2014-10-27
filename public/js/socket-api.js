@@ -36,7 +36,7 @@ function init(){
 	});
 
 	socket.on('newAnnouncement',function(data){
-		addNewPublicAnnouncement($("#announcements"),data)
+		announcementReceived($("#announcements"),data)
 	});
 
 	socket.on('newStatusMessage', function(data){

@@ -33,7 +33,8 @@
 					}
 					if(privilegeLevel==="Coordinator"||privilegeLevel==="Administrator"){
 						$("#goToAnalyzeForm").removeAttr("hidden");
-						$("#postPublicAnnouncementBar").removeAttr("hidden");
+						$("#announcement").removeAttr("hidden");
+						$("#submitPublicAnnouncement").removeAttr("hidden");
 					}
 
 			      	//console.log(JSON.stringify(statusCode));
@@ -62,6 +63,19 @@
 				$("#wallMessageClearBtn").click(function(){
 					$("#wallMessageSearchFilter").val('');
 					refreshPublicWall();
+				});
+
+				$("#loadMoreAnnouncementsBtn").click(function(){
+					loadMoreAnnouncements($("#announcements"));
+				});
+
+				$("#announcementSearchBtn").click(function(){
+					refreshAnnouncements($("#announcementSearchFilter").val());
+				});
+
+				$("#announcementClearBtn").click(function(){
+					$("#announcementSearchFilter").val('');
+					refreshAnnouncements();
 				});
 		    });
 
@@ -156,11 +170,20 @@
 				</div>
 			</div>
 			<div id="publicAnnouncement">
-				<div hidden="hidden" id="postPublicAnnouncementBar" class="longBar">
-					<input id="announcement" type="text" name="announcement"/>
-					<button id="submitPublicAnnouncement">Post Announcement</button>
+				<div id="postPublicAnnouncementBar" class="longBar">
+					<input hidden="hidden" id="announcement" type="text" name="announcement"/>
+					<button hidden="hidden" id="submitPublicAnnouncement">Post Announcement</button>
+					<input id="announcementSearchFilter" type="text" />
+					<button id="announcementSearchBtn">Search</button>
+					<button id="announcementClearBtn">Clear</button>
+				</div>
+				<div id="noAnnouncementsBar" class="longBar" style="display:none">
+					No announcements found.
 				</div>
 				<div id="announcements">
+				</div>
+				<div id="loadMoreAnnouncements" class="longBar">
+					<button id="loadMoreAnnouncementsBtn">Load More</button>
 				</div>
 			</div>
 			<div id="peopleDirectory">

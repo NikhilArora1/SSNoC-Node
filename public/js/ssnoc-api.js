@@ -7,6 +7,10 @@ var publicWallMessages = [];
 var filteredWallMessages = [];
 var wallMessageFilterTerm = '';
 
+var publicAnnouncements = [];
+var filteredPublicAnnouncements = [];
+var announcementsFilterTerm = '';
+
 function getStatusIcon(status){
 	var icon = '';
 	if(status == "GREEN"){
@@ -115,17 +119,10 @@ function refreshPublicWall(searchTerm){
             }
             
             loadMoreWallMessages(wall);
-            // data.forEach(function(message){
-            //     if(message.type == "MESSAGE"){
-            //         addNewWallMessage(wall, {message: message});
-            //     } else {
-            //         addNewStatusMessage(wall, {status: message});
-            //     }
-            // })
         });
 }
 
-function refreshAnnouncements(){
+function refreshAnnouncements(searchTerm){
     $.ajax({
             url:  '/announcements',
             type: 'GET',
@@ -133,9 +130,19 @@ function refreshAnnouncements(){
         }).done(function(data) {
             var wall = $("#announcements");
             wall.html('');
+            publicAnnouncements = [];
             data.forEach(function(announcement){
-               addNewPublicAnnouncement(wall, {message: announcement}); 
+                publicAnnouncements.unshift({message: announcement});
             })
+            if(searchTerm == undefined || searchTerm == ""){
+                announcementsFilterTerm = "";
+                filteredPublicAnnouncements = publicAnnouncements;
+            } else {
+                announcementsFilterTerm = searchTerm;
+                filteredPublicAnnouncements = messageFilter(searchTerm, publicAnnouncements);
+            }
+
+            loadMoreAnnouncements(wall);
         });
 }
 
@@ -178,6 +185,28 @@ function loadMoreWallMessages(wall){
     }
 }
 
+function loadMoreAnnouncements(wall){
+    var currentCount = wall.children().length;
+    if(currentCount < filteredPublicAnnouncements.length){
+        for(var i=currentCount; i < (currentCount+10) && i < filteredPublicAnnouncements.length; i++){
+            if(filteredPublicAnnouncements[i].message !== undefined){
+                addNewPublicAnnouncement(wall, filteredPublicAnnouncements[i], true);
+            }
+        }
+    }
+    if(wall.children().length < filteredPublicAnnouncements.length){
+        $("#loadMoreAnnouncements").show();
+    } else {
+        $("#loadMoreAnnouncements").hide();
+    }
+
+    if(filteredPublicAnnouncements.length == 0 && announcementsFilterTerm.length > 0){
+        $("#noAnnouncementsBar").show();
+    } else {
+        $("#noAnnouncementsBar").hide();
+    }
+}
+
 function wallMessageReceived(wall, data){
     publicWallMessages.unshift(data);
     if(wallMessageFilterTerm.length == 0){
@@ -189,6 +218,13 @@ function statusMessageReceived(wall, data){
     publicWallMessages.unshift(data);
     if(wallMessageFilterTerm.length == 0){
         addNewStatusMessage(wall, data, false);
+    }
+}
+
+function announcementReceived(wall, data){
+    publicAnnouncements.unshift(data);
+    if(announcementsFilterTerm.length == 0){
+        addNewPublicAnnouncement(wall, data, false);
     }
 }
 
