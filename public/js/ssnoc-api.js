@@ -15,6 +15,10 @@ var filteredParticipants = [];
 var participantsFilterTerm = '';
 var participantsFilterType = '';
 
+var privateMessages = [];
+var filteredPrivateMessages = [];
+var privateMessagesFilterTerm = '';
+
 function getStatusIcon(status){
 	var icon = '';
 	if(status == "GREEN"){
@@ -310,22 +314,72 @@ function adminProfile(user){
     window.location = url;
 }
 
-function onNewPrivateMessage(message){
-    if(chatBuddy === message.author || chatBuddy === message.target){
-        insertChatMessage(message);
-    } else if(message.author !== userName) {
-        notifyNewMessage(message);
+function setPrivateMessages(messages, filterTerm){
+    if(filterTerm == null || filterTerm == ""){
+        privateMessagesFilterTerm = "";
+    } else {
+        privateMessagesFilterTerm = filterTerm;
+    }
+
+    privateMessages = [];
+    messages.forEach(function(message){
+         privateMessages.unshift({message: message});
+    });
+
+    if(privateMessagesFilterTerm.length > 0){
+        filteredPrivateMessages = messageFilter(privateMessagesFilterTerm, privateMessages);
+    } else {
+        filteredPrivateMessages = privateMessages;
+    }
+
+    loadMorePrivateMessages();
+}
+
+function loadMorePrivateMessages(){
+    var wall = $("#chatMessages");
+    var currentCount = wall.children().length;
+    if(currentCount < filteredPrivateMessages.length){
+        for(var i=currentCount; i < (currentCount+10) && i < filteredPrivateMessages.length; i++){
+            if(filteredPrivateMessages[i].message !== undefined){
+                insertChatMessage(filteredPrivateMessages[i].message, false);
+            }
+        }
+    }
+    if(wall.children().length < filteredPrivateMessages.length){
+        $("#loadMoreBar").show();
+    } else {
+        $("#loadMoreBar").hide();
+    }
+
+    if(filteredPrivateMessages.length == 0 && privateMessagesFilterTerm.length > 0){
+        $("#noMessagesBar").show();
+    } else {
+        $("#noMessagesBar").hide();
     }
 }
 
-function insertChatMessage(chatMessage){
+function insertChatMessage(chatMessage, append){
     var $div = $("<div>").loadTemplate($("#message_template"), {
         userProfileImage: '/img/photo4.png',
         username: chatMessage.author,
         timestamp: chatMessage.postedAt,
         message: chatMessage.content
     });
-    $("#chatMessages").append($div);
+    if(append){
+        $("#chatMessages").append($div);
+    } else {
+        $("#chatMessages").prepend($div);
+    }
+}
+
+function onNewPrivateMessage(message){
+    if(chatBuddy === message.author || chatBuddy === message.target){
+        if(privateMessagesFilterTerm.length == 0){
+            insertChatMessage(message, true);
+        }
+    } else if(message.author !== userName) {
+        notifyNewMessage(message);
+    }
 }
 
 function notifyNewMessage(chatMessage){

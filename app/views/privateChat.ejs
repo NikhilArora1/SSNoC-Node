@@ -7,26 +7,29 @@
 	<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 	<script type="text/javascript" src="/js/date.js"></script>
 	<link rel="stylesheet" href="/css/toastr.min.css"/>
+	<script type="text/javascript" src="/js/filter.js"></script>
 	<script type="text/javascript" src="/js/toastr.min.js"></script>
 	<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 	<script type="text/javascript" src="/js/socket-api.js"></script>
 	<link rel="stylesheet" href="/css/ssnoc.css"/>
 	<script type="text/javascript">
-		$(document).ready(function(){
-			chatBuddy = <%-JSON.stringify(buddyName)%>;
-			console.log("starting chat with: " + chatBuddy);
-			$("#chatHeader").append(": " + chatBuddy);
-
+		function loadMessages(searchFilter){
 			// query the existing messages between two users
 			$.ajax({
         		url: '/privateMessages?buddy=' + chatBuddy,
         		type: 'GET',
         		dataType: 'json'
 		    }).done(function(data){
-		        data.forEach(function(message){
-		            insertChatMessage(message);
-		        });
+		    	$("#chatMessages").html('');
+		    	setPrivateMessages(data, searchFilter)
 		    });
+		}
+
+		$(document).ready(function(){
+			chatBuddy = <%-JSON.stringify(buddyName)%>;
+			console.log("starting chat with: " + chatBuddy);
+			$("#chatHeader").append(": " + chatBuddy);
+			loadMessages('');
 		});
 	</script>
 	<script>
@@ -48,6 +51,16 @@
 	    	}
 	    	selObj.innerHTML=htmlStr;
       	});	
+
+    	function searchMessages(){
+    		loadMessages($("#searchFilter").val());
+    	}
+
+    	function clearSearch(){
+    		$("#searchFilter").val('');
+    		loadMessages('');
+    	}
+
 	</script>
 	<style>
     	html, body { height:100%; }
@@ -63,7 +76,20 @@
 		</select>
 	</div>
 	<h2 id="chatHeader">Private Chat</h2>
-	<div id="chatMessages" class="chatMessages">
+	<div class="longBar">
+		<input type="text" id="searchFilter"/>
+		<button id="searchBtn" onclick="searchMessages()">Search</button>
+		<button id="clearBtn" onclick="clearSearch()">Clear</button>
+	</div>
+	<div class="chatMessages">
+		<div class="longBar" id="loadMoreBar">
+			<button id="loadMore" onclick="loadMorePrivateMessages()">Load More</button>
+		</div>
+		<div class="longBar" id="noMessagesBar">
+			No messages.
+		</div>
+		<div id="chatMessages">
+		</div>
 	</div>
 	<div id="messageEntry" class="messageEntry">
 		<input type="text" id="privateChatInput"/>
