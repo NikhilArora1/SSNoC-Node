@@ -4,16 +4,22 @@
 
 // @param:
 //	searchTarget: string
+// 	filterType: string (name or status)
 //	users: list of users
 // @return:
 //	results: list of users
-function userFilter(searchTarget,users){
+function userFilter(searchTarget, filterType, users){
 	var n1=-1,n2=-1;
 	var results = [];
 	var reg = new RegExp(searchTarget,"i");
+	console.log("search target: " + searchTarget + " filter: " + filterType);
 	for(i=0;i<users.length;i++){
-		n1=users[i].local.name.search(reg,"i");
-		n2=users[i].local.status.search(reg,"i");
+		console.log("user: " + JSON.stringify(users[i]));
+		if(filterType == "name"){
+			n1=users[i].name.search(reg,"i");
+		} else if(filterType == "status"){
+			n2=users[i].status.status.search(reg,"i");
+		}
 		if(n1>=0||n2>=0){
 			results[results.length]=users[i];
 		}

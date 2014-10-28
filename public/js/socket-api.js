@@ -42,7 +42,6 @@ function init(){
 	socket.on('newStatusMessage', function(data){
 		console.log("new status message: " + JSON.stringify(data) );
 		statusMessageReceived($("#messages"), data);
-		refreshPeopleDirectory();
 	});
 
 	$("#submitWallMessage").click(function(){

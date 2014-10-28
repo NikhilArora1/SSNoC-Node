@@ -11,6 +11,10 @@ var publicAnnouncements = [];
 var filteredPublicAnnouncements = [];
 var announcementsFilterTerm = '';
 
+var filteredParticipants = [];
+var participantsFilterTerm = '';
+var participantsFilterType = '';
+
 function getStatusIcon(status){
 	var icon = '';
 	if(status == "GREEN"){
@@ -38,6 +42,10 @@ function updateParticipants(participants){
     }
     keys = Object.keys(map);
     keys.sort();
+
+    if(participantsFilterType != "none"){
+        participants.all = userFilter(participantsFilterTerm, participantsFilterType, participants.all);
+    }
 
     participants.all.forEach(function(userObj){
     	var username = userObj.name;
@@ -84,13 +92,25 @@ function updateParticipants(participants){
     onlineUsers = map;
 }
 
-function refreshPeopleDirectory(){
+function onUsersChanged(){
+    refreshPeopleDirectory(participantsFilterType, participantsFilterTerm);
+}
+
+function refreshPeopleDirectory(filterType, filterTerm){
+    if(filterType == null || filterTerm == ""){
+        participantsFilterType = "none";
+        participantsFilterTerm = "";
+    } else {
+        participantsFilterType = filterType;
+        participantsFilterTerm = filterTerm;
+    }
+
     $.ajax({
             url:  '/participants',
             type: 'GET',
             dataType: 'json'
         }).done(function(data) {
-            updateParticipants(data);
+            updateParticipants(data)
         });
 }
 
@@ -219,6 +239,7 @@ function statusMessageReceived(wall, data){
     if(wallMessageFilterTerm.length == 0){
         addNewStatusMessage(wall, data, false);
     }
+    refreshPeopleDirectory(participantsFilterType, participantsFilterTerm);
 }
 
 function announcementReceived(wall, data){
