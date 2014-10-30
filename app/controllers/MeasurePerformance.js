@@ -11,6 +11,7 @@ module.exports = function(_, io, participants, passport) {
   var testContent = "abcdefghijlmnopqrstu";
   var timeoutObject = null;
   var startTime = null;
+  var username = 'TEST';
 
   var setupTest = function(callback){
     PerformanceRest.setupPerformance(function(err){
@@ -19,8 +20,9 @@ module.exports = function(_, io, participants, passport) {
      });
   }
 
-  var initialize = function(duration, callback){
+  var initialize = function(user, duration, callback){
     if(!testRunning){
+      username = user;
       postRequestCounter = 0;
       getRequestCounter = 0;
       start(duration, callback);
@@ -33,7 +35,7 @@ module.exports = function(_, io, participants, passport) {
   var start = function(duration, callback){
     startTime = new Date();
     testRunning = true;
-    console.log("duration: " + duration);
+    console.log("Starting performance test with user: " + username + " and duration: " + duration);
     timeoutObject = setTimeout(function(){
       end();
     }, duration);
@@ -80,7 +82,7 @@ module.exports = function(_, io, participants, passport) {
     if(testRunning){
       console.log("postRequestCounter: " + postRequestCounter + " | request limit: " + postRequestLimit);
       if(postRequestCounter < postRequestLimit){
-          MessageRest.postWallMessage("TEST", testContent, "2012-12-12 12:12", function(){
+          MessageRest.postWallMessage(username, testContent, "2012-12-12 12:12", function(){
             postRequestCounter++;
             MessageRest.getWallMessages(function(){
               getRequestCounter++;
@@ -101,8 +103,9 @@ module.exports = function(_, io, participants, passport) {
       res.render("MeasurePerformance");
   	},
   	startPerformanceTests: function(req, res){
+      var user_name=req.session.passport.user.user_name;
       setupTest(function(){
-        initialize(req.body.testDuration * 1000, function(){
+        initialize(user_name, req.body.testDuration * 1000, function(){
           res.send(200);
         });
       })
