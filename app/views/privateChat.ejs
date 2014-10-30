@@ -2,15 +2,17 @@
 <html>
 <head>
 	<meta name="viewport" content="width=360, initial-scale=1.0" />
+	<title>SSNoC SB4</title>
+	<link rel="stylesheet" href="/css/toastr.min.css"/>
+	<link rel="stylesheet" href="/css/ssnoc.css"/>
+	<!-- <link rel="stylesheet" href="/css/ssnocMobile.css"> -->
 	<script type="text/javascript" src="/js/socket.io.min.js"></script>
 	<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 	<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 	<script type="text/javascript" src="/js/date.js"></script>
-	<link rel="stylesheet" href="/css/toastr.min.css"/>
 	<script type="text/javascript" src="/js/toastr.min.js"></script>
 	<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 	<script type="text/javascript" src="/js/socket-api.js"></script>
-	<link rel="stylesheet" href="/css/ssnoc.css"/>
 	<script type="text/javascript">
 		$(document).ready(function(){
 			chatBuddy = <%-JSON.stringify(buddyName)%>;
@@ -30,24 +32,38 @@
 		});
 	</script>
 	<script>
-		$.ajax({
-      		url:  '/user',
-      		type: 'GET',
-      		dataType: 'json'
-    	}).done(function(data) {
-    		console.log(JSON.stringify(data)); //for test
-      		statusCode= data.local.status.status;
-      		console.log(JSON.stringify(statusCode));
-      		selObj=document.getElementById("selectStatus");
-	    	statuses=["GREEN","YELLOW","RED"];	
-	    	displayStatuses=["OK","Help","Emergency"];
-	    	htmlStr="";
-	    	for(i=0;i<statuses.length;i++){
-	    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
-	    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
-	    	}
-	    	selObj.innerHTML=htmlStr;
-      	});	
+		$(document).ready(function(){
+			$.ajax({
+	      		url:  '/user',
+	      		type: 'GET',
+	      		dataType: 'json'
+	    	}).done(function(data) {
+	    		//console.log(JSON.stringify(data)); //for test
+	      		statusCode= data.local.status.status;
+	      		privilegeLevel=data.local.privilegeLevel;
+	      		console.log(privilegeLevel);
+	      		//check for privilegeLevel
+				if(privilegeLevel==="Monitor"||privilegeLevel==="Administrator"){
+					$("#goToMeasureMemoryForm").removeAttr("hidden");
+					$("#goToMeasurePerformanceForm").removeAttr("hidden");
+				}
+				if(privilegeLevel==="Coordinator"||privilegeLevel==="Administrator"){
+					$("#goToAnalyzeForm").removeAttr("hidden");
+					$("#postPublicAnnouncementBar").removeAttr("hidden");
+				}
+
+		      	//console.log(JSON.stringify(statusCode));
+	      		selObj=document.getElementById("selectStatus");
+		    	statuses=["GREEN","YELLOW","RED"];	
+		    	displayStatuses=["OK","Help","Emergency"];
+		    	htmlStr="";
+		    	for(i=0;i<statuses.length;i++){
+		    		if(statusCode===statuses[i]){htmlStr+="<option value='"+statuses[i]+"' selected='selected'>"+displayStatuses[i]+"</option>"; }
+		    		else {htmlStr+="<option value='"+statuses[i]+"'>"+displayStatuses[i]+"</option>"}
+		    	}
+		    	selObj.innerHTML=htmlStr;
+	      	});	
+	    });
 	</script>
 	<style>
     	html, body { height:100%; }
@@ -55,12 +71,14 @@
 </head>
 <body>
 	<div id="header" class="header">
-		<h3 class="head" id="username"></h3>
-		<form class="goTo" action="/logout"><input type="submit" value="Logout"></form>
-		<form class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
-		<form class="goTo" action="/performnce"><input type="submit" value="Measure Performance"></form>
-		<select id="selectStatus" class="selectStatus">
-		</select>
+			<h3 class="head" id="username"></h3>
+			<form id="logoutForm" class="goTo" action="/logout"><input type="submit" value="Logout"></form>
+			<form id="goHomeForm" class="goTo" action="/"><input type="submit" value="Home"></form>
+			<form hidden="hidden" id="goToMeasureMemoryForm" class="goTo" action="/memory"><input type="submit" value="Measure Memory"></form>
+			<form hidden="hidden" id="goToMeasurePerformanceForm" class="goTo" action="/performance"><input type="submit" value="Measure Performance"></form>
+			<form hidden="hidden" id="goToAnalyzeForm" class="goTo" action="/analyze"><input type="submit" value="Analyze Social Network"></form>
+			<select id="selectStatus" class="selectStatus">
+			</select>
 	</div>
 	<h2 id="chatHeader">Private Chat</h2>
 	<div id="chatMessages" class="chatMessages">
