@@ -3,6 +3,22 @@ var chatBuddy = '';
 var userName =  '';
 var user = '';
 
+var publicWallMessages = [];
+var filteredWallMessages = [];
+var wallMessageFilterTerm = '';
+
+var publicAnnouncements = [];
+var filteredPublicAnnouncements = [];
+var announcementsFilterTerm = '';
+
+var filteredParticipants = [];
+var participantsFilterTerm = '';
+var participantsFilterType = '';
+
+var privateMessages = [];
+var filteredPrivateMessages = [];
+var privateMessagesFilterTerm = '';
+
 function getStatusIcon(status){
 	var icon = '';
 	if(status == "GREEN"){
@@ -30,6 +46,10 @@ function updateParticipants(participants){
     }
     keys = Object.keys(map);
     keys.sort();
+
+    if(participantsFilterType != "none"){
+        participants.all = userFilter(participantsFilterTerm, participantsFilterType, participants.all);
+    }
 
     participants.all.forEach(function(userObj){
     	var username = userObj.name;
@@ -76,17 +96,29 @@ function updateParticipants(participants){
     onlineUsers = map;
 }
 
-function refreshPeopleDirectory(){
+function onUsersChanged(){
+    refreshPeopleDirectory(participantsFilterType, participantsFilterTerm);
+}
+
+function refreshPeopleDirectory(filterType, filterTerm){
+    if(filterType == null || filterTerm == ""){
+        participantsFilterType = "none";
+        participantsFilterTerm = "";
+    } else {
+        participantsFilterType = filterType;
+        participantsFilterTerm = filterTerm;
+    }
+
     $.ajax({
             url:  '/participants',
             type: 'GET',
             dataType: 'json'
         }).done(function(data) {
-            updateParticipants(data);
+            updateParticipants(data)
         });
 }
 
-function refreshPublicWall(){
+function refreshPublicWall(searchTerm){
     $.ajax({
             url:  '/wall',
             type: 'GET',
@@ -94,17 +126,27 @@ function refreshPublicWall(){
         }).done(function(data) {
             var wall = $("#messages");
             wall.html('');
+            publicWallMessages = [];
             data.forEach(function(message){
                 if(message.type == "MESSAGE"){
-                    addNewWallMessage(wall, {message: message});
+                    publicWallMessages.unshift({message: message});
                 } else {
-                    addNewStatusMessage(wall, {status: message});
+                    publicWallMessages.unshift({status: message});
                 }
             })
+            if(searchTerm == undefined || searchTerm == ""){
+                wallMessageFilterTerm = "";
+                filteredWallMessages = publicWallMessages;
+            } else {
+                wallMessageFilterTerm = searchTerm;
+                filteredWallMessages = messageFilter(searchTerm, publicWallMessages);
+            }
+            
+            loadMoreWallMessages(wall);
         });
 }
 
-function refreshAnnouncements(){
+function refreshAnnouncements(searchTerm){
     $.ajax({
             url:  '/announcements',
             type: 'GET',
@@ -112,9 +154,19 @@ function refreshAnnouncements(){
         }).done(function(data) {
             var wall = $("#announcements");
             wall.html('');
+            publicAnnouncements = [];
             data.forEach(function(announcement){
-               addNewPublicAnnouncement(wall, {message: announcement}); 
+                publicAnnouncements.unshift({message: announcement});
             })
+            if(searchTerm == undefined || searchTerm == ""){
+                announcementsFilterTerm = "";
+                filteredPublicAnnouncements = publicAnnouncements;
+            } else {
+                announcementsFilterTerm = searchTerm;
+                filteredPublicAnnouncements = messageFilter(searchTerm, publicAnnouncements);
+            }
+
+            loadMoreAnnouncements(wall);
         });
 }
 
@@ -133,20 +185,100 @@ function refreshChatBuddies(){
     });
 }
 
-function addNewWallMessage(wall, data){
+function loadMoreWallMessages(wall){
+    var currentCount = wall.children().length;
+    if(currentCount < filteredWallMessages.length){
+        for(var i=currentCount; i < (currentCount+10) && i < filteredWallMessages.length; i++){
+            if(filteredWallMessages[i].message !== undefined){
+                addNewWallMessage(wall, filteredWallMessages[i], true);
+            } else {
+                addNewStatusMessage(wall, filteredWallMessages[i], true);
+            }
+        }
+    }
+    if(wall.children().length < filteredWallMessages.length){
+        $("#loadMoreMessages").show();
+    } else {
+        $("#loadMoreMessages").hide();
+    }
+
+    if(filteredWallMessages.length == 0 && wallMessageFilterTerm.length > 0){
+        $("#noMessagesBar").show();
+    } else {
+        $("#noMessagesBar").hide();
+    }
+}
+
+function loadMoreAnnouncements(wall){
+    var currentCount = wall.children().length;
+    if(currentCount < filteredPublicAnnouncements.length){
+        for(var i=currentCount; i < (currentCount+10) && i < filteredPublicAnnouncements.length; i++){
+            if(filteredPublicAnnouncements[i].message !== undefined){
+                addNewPublicAnnouncement(wall, filteredPublicAnnouncements[i], true);
+            }
+        }
+    }
+    if(wall.children().length < filteredPublicAnnouncements.length){
+        $("#loadMoreAnnouncements").show();
+    } else {
+        $("#loadMoreAnnouncements").hide();
+    }
+
+    if(filteredPublicAnnouncements.length == 0 && announcementsFilterTerm.length > 0){
+        $("#noAnnouncementsBar").show();
+    } else {
+        $("#noAnnouncementsBar").hide();
+    }
+}
+
+function wallMessageReceived(wall, data){
+    publicWallMessages.unshift(data);
+    if(wallMessageFilterTerm.length == 0){
+        addNewWallMessage(wall, data, false);
+    }
+}
+
+function statusMessageReceived(wall, data){
+    publicWallMessages.unshift(data);
+    if(wallMessageFilterTerm.length == 0){
+        addNewStatusMessage(wall, data, false);
+    }
+    refreshPeopleDirectory(participantsFilterType, participantsFilterTerm);
+}
+
+function announcementReceived(wall, data){
+    publicAnnouncements.unshift(data);
+    if(announcementsFilterTerm.length == 0){
+        addNewPublicAnnouncement(wall, data, false);
+    }
+}
+
+function addNewWallMessage(wall, data, append){
     var $div = $("<div>").loadTemplate($("#wall_message_template"), data.message);
-    wall.prepend($div);
+    if(append){
+        wall.append($div);
+    } else {
+        wall.prepend($div);
+    }
 }
 
-function addNewPublicAnnouncement(wall, data){
+function addNewPublicAnnouncement(wall, data, append){
     var $div = $("<div>").loadTemplate($("#public_announcement_template"), data.message);
-    wall.prepend($div);
+    if(append){
+        wall.append($div);
+    } else {
+        wall.prepend($div);
+    }
 }
 
-function addNewStatusMessage(wall, data){
+function addNewStatusMessage(wall, data, append){
     data.status.statusIcon = getStatusIcon(data.status.status);
     var $div = $("<div>").loadTemplate($("#wall_status_template"), data.status);
-    wall.prepend($div);
+    if(append){
+        wall.append($div);
+    } else {
+        wall.prepend($div);
+    }
 }
 
 function createChatBuddyCell(user){
@@ -182,22 +314,72 @@ function adminProfile(user){
     window.location = url;
 }
 
-function onNewPrivateMessage(message){
-    if(chatBuddy === message.author || chatBuddy === message.target){
-        insertChatMessage(message);
-    } else if(message.author !== userName) {
-        notifyNewMessage(message);
+function setPrivateMessages(messages, filterTerm){
+    if(filterTerm == null || filterTerm == ""){
+        privateMessagesFilterTerm = "";
+    } else {
+        privateMessagesFilterTerm = filterTerm;
+    }
+
+    privateMessages = [];
+    messages.forEach(function(message){
+         privateMessages.unshift({message: message});
+    });
+
+    if(privateMessagesFilterTerm.length > 0){
+        filteredPrivateMessages = messageFilter(privateMessagesFilterTerm, privateMessages);
+    } else {
+        filteredPrivateMessages = privateMessages;
+    }
+
+    loadMorePrivateMessages();
+}
+
+function loadMorePrivateMessages(){
+    var wall = $("#chatMessages");
+    var currentCount = wall.children().length;
+    if(currentCount < filteredPrivateMessages.length){
+        for(var i=currentCount; i < (currentCount+10) && i < filteredPrivateMessages.length; i++){
+            if(filteredPrivateMessages[i].message !== undefined){
+                insertChatMessage(filteredPrivateMessages[i].message, false);
+            }
+        }
+    }
+    if(wall.children().length < filteredPrivateMessages.length){
+        $("#loadMoreBar").show();
+    } else {
+        $("#loadMoreBar").hide();
+    }
+
+    if(filteredPrivateMessages.length == 0 && privateMessagesFilterTerm.length > 0){
+        $("#noMessagesBar").show();
+    } else {
+        $("#noMessagesBar").hide();
     }
 }
 
-function insertChatMessage(chatMessage){
+function insertChatMessage(chatMessage, append){
     var $div = $("<div>").loadTemplate($("#message_template"), {
         userProfileImage: '/img/photo4.png',
         username: chatMessage.author,
         timestamp: chatMessage.postedAt,
         message: chatMessage.content
     });
-    $("#chatMessages").append($div);
+    if(append){
+        $("#chatMessages").append($div);
+    } else {
+        $("#chatMessages").prepend($div);
+    }
+}
+
+function onNewPrivateMessage(message){
+    if(chatBuddy === message.author || chatBuddy === message.target){
+        if(privateMessagesFilterTerm.length == 0){
+            insertChatMessage(message, true);
+        }
+    } else if(message.author !== userName) {
+        notifyNewMessage(message);
+    }
 }
 
 function notifyNewMessage(chatMessage){

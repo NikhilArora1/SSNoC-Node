@@ -10,6 +10,7 @@
 		<script type="text/javascript" src="/js/jquery-1.9.1.min.js"></script>
 		<script type="text/javascript" src="/js/jquery.loadTemplate-1.4.4.min.js"></script>
 		<script type="text/javascript" src="/js/date.js"></script>
+		<script type="text/javascript" src="/js/filter.js"></script>
 		<script type="text/javascript" src="/js/toastr.min.js"></script>
 		<script type="text/javascript" src="/js/ssnoc-api.js"></script>
 		<script type="text/javascript" src="/js/socket-api.js"></script>
@@ -32,7 +33,8 @@
 					}
 					if(privilegeLevel==="Coordinator"||privilegeLevel==="Administrator"){
 						$("#goToAnalyzeForm").removeAttr("hidden");
-						$("#postPublicAnnouncementBar").removeAttr("hidden");
+						$("#announcement").removeAttr("hidden");
+						$("#submitPublicAnnouncement").removeAttr("hidden");
 					}
 
 			      	//console.log(JSON.stringify(statusCode));
@@ -49,11 +51,40 @@
 		      	//show public wall on page load
 				showPublicWall();
 				$("#pageSelector").val("publicWall");
+
+				$("#loadMoreMessagesBtn").click(function(){
+					loadMoreWallMessages($("#messages"));
+				});
+
+				$("#wallMessageSearchBtn").click(function(){
+					refreshPublicWall($("#wallMessageSearchFilter").val());
+				});
+
+				$("#wallMessageClearBtn").click(function(){
+					$("#wallMessageSearchFilter").val('');
+					refreshPublicWall();
+				});
+
+				$("#loadMoreAnnouncementsBtn").click(function(){
+					loadMoreAnnouncements($("#announcements"));
+				});
+
+				$("#announcementSearchBtn").click(function(){
+					refreshAnnouncements($("#announcementSearchFilter").val());
+				});
+
+				$("#announcementClearBtn").click(function(){
+					$("#announcementSearchFilter").val('');
+					refreshAnnouncements();
+				});
+
+				showPeopleFilterByName();
 		    });
 
 		</script>
 		<script type="text/javascript">
 			function showPublicWall(){
+				$("#wallMessageSearchFilter").val('');
 				$("#peopleDirectory").hide();
 				$("#chatBuddies").hide();
 				$("#publicAnnouncement").hide();
@@ -65,6 +96,7 @@
 				$("#publicWall").hide();
 				$("#chatBuddies").hide();
 				$("#publicAnnouncement").hide();
+				clearPeopleFilter();
 				refreshPeopleDirectory();
 				$("#peopleDirectory").show();
 			}
@@ -98,6 +130,50 @@
 				}
 			}
 
+			function selectPeopleFilter(selObj){
+				content=selObj.options[selObj.selectedIndex].value;
+				if(content==="name"){
+					showPeopleFilterByName();
+				} else if(content==="status"){
+					showPeopleFilterByStatus();
+				}
+			}
+
+			function showPeopleFilterByName(){
+				$("#peopleNameFilterSet").show();
+				$("#peopleStatusFilterSet").hide();
+			}
+
+			function showPeopleFilterByStatus(){
+				$("#peopleNameFilterSet").hide();
+				$("#peopleStatusFilterSet").show();
+			}
+
+			function filterPeopleByName(){
+				refreshPeopleDirectory("name", $("#peopleNameFilter").val());
+			}
+
+			function filterPeopleByStatus(selObj){
+				content=selObj.options[selObj.selectedIndex].value;
+				var filterTerm = '';
+				if(content==="GREEN"){
+					filterTerm = "GREEN";
+				} else if(content==="YELLOW"){
+					filterTerm = "YELLOW";
+				} else if(content==="RED"){
+					filterTerm = "RED";
+				} else {
+					filterTerm = "";
+				}
+				refreshPeopleDirectory("status", filterTerm);
+			}
+
+			function clearPeopleFilter(){
+				$("#peopleNameFilter").val('');
+				$("#peopleStatusFilterSelector").val('');
+				refreshPeopleDirectory(null, null);
+			}
+
 		</script>
 	</head>
 
@@ -127,19 +203,57 @@
 				<div id="submitMessageBar" class="longBar">
 					<input id="wallMessage" type="text" name="message"/>
 					<button id="submitWallMessage">Submit Wall Message</button>
+					<input id="wallMessageSearchFilter" type="text" />
+					<button id="wallMessageSearchBtn">Search</button>
+					<button id="wallMessageClearBtn">Clear</button>
+				</div>
+				<div id="noMessagesBar" class="longBar" style="display:none">
+					No messages found.
 				</div>
 				<div id="messages">
 				</div>
+				<div id="loadMoreMessages" class="longBar">
+					<button id="loadMoreMessagesBtn">Load More</button>
+				</div>
 			</div>
 			<div id="publicAnnouncement">
-				<div hidden="hidden" id="postPublicAnnouncementBar" class="longBar">
-					<input id="announcement" type="text" name="announcement"/>
-					<button id="submitPublicAnnouncement">Post Announcement</button>
+				<div id="postPublicAnnouncementBar" class="longBar">
+					<input hidden="hidden" id="announcement" type="text" name="announcement"/>
+					<button hidden="hidden" id="submitPublicAnnouncement">Post Announcement</button>
+					<input id="announcementSearchFilter" type="text" />
+					<button id="announcementSearchBtn">Search</button>
+					<button id="announcementClearBtn">Clear</button>
+				</div>
+				<div id="noAnnouncementsBar" class="longBar" style="display:none">
+					No announcements found.
 				</div>
 				<div id="announcements">
 				</div>
+				<div id="loadMoreAnnouncements" class="longBar">
+					<button id="loadMoreAnnouncementsBtn">Load More</button>
+				</div>
 			</div>
 			<div id="peopleDirectory">
+				<div id="peopleDirectoryFilterBar" class="longBar">
+					Search:
+					<select id="peopleFilterSelector" onchange="selectPeopleFilter(this)">
+						<option value="name">By Name</option>
+						<option value="status">By Status</option>
+					</select>
+					<div id="peopleNameFilterSet" style="display:inline-block">
+						<input type="text" id="peopleNameFilter"/>
+						<button id="peopleNameFilterBtn" onclick="filterPeopleByName()">Search</button>
+					</div>
+					<div id="peopleStatusFilterSet" style="display:inline-block">
+						<select id="peopleStatusFilterSelector" onchange="filterPeopleByStatus(this)">
+							<option value="">All</option>
+							<option value="GREEN">OK</option>
+							<option value="YELLOW">Help</option>
+							<option value="RED">Emergency</option>
+						</select>
+					</div>
+					<button id="peopleFilterClearBtn" onclick="clearPeopleFilter()">Clear</button>
+				</div>
 				<h2>Me</h2>
 				<div id="myUser">
 				</div>

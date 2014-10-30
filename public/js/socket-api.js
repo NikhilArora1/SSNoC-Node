@@ -32,17 +32,16 @@ function init(){
   	});
 
   	socket.on('newWallMessage', function(data){
-		addNewWallMessage($("#messages"), data);
+		wallMessageReceived($("#messages"), data);
 	});
 
 	socket.on('newAnnouncement',function(data){
-		addNewPublicAnnouncement($("#announcements"),data)
+		announcementReceived($("#announcements"),data)
 	});
 
 	socket.on('newStatusMessage', function(data){
 		console.log("new status message: " + JSON.stringify(data) );
-		addNewStatusMessage($("#messages"), data);
-		refreshPeopleDirectory();
+		statusMessageReceived($("#messages"), data);
 	});
 
 	$("#submitWallMessage").click(function(){

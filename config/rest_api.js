@@ -1,12 +1,12 @@
 var host_url = process.env.REST_API_URL || "http://ec2-54-68-51-131.us-west-2.compute.amazonaws.com:5454/ssnoc";
 
 var RestAPI = {
-  'get_all_users' : host_url + '/users',
+  'get_all_users' : host_url + '/users/active',
   'is_password_valid' : host_url + '/user/',
   'get_user' : host_url + '/user/',
   'get_status' : host_url + '/status/userName/',
   'post_new_user' : host_url + '/user/signup',
-  'get_wall_messages' : host_url + '/messages/wall',
+  'get_wall_messages' : host_url + '/messages/wall/visible',
   'start_measurement' : host_url + '/memory/start',
   'stop_measurement' : host_url + '/memory/stop',
   'delete_memory' : host_url + '/memory',
@@ -16,7 +16,7 @@ var RestAPI = {
   'teardown_performance' : host_url + '/performance/teardown',
   'get_unconnected_users' : host_url + '/usergroups/unconnected',
   'post_announcement' : host_url + '/message/announcement',
-  'get_announcements' : host_url + '/messages/announcement'
+  'get_announcements' : host_url + '/messages/announcement/visible'
 };
 
 RestAPI.update_user = function(userName){
@@ -40,7 +40,7 @@ RestAPI.send_chat_message = function(sendinguserName, receivinguserName){
 }
 
 RestAPI.get_chat_messages = function(Username1, Username2){
-	return host_url + '/messages/' + Username1 + '/' + Username2;
+	return host_url + '/messages/' + Username1 + '/' + Username2 + '/visible';
 }
 
 RestAPI.get_users = function(userName){
