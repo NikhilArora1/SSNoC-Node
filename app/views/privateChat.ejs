@@ -67,15 +67,15 @@
 		    	}
 		    	selObj.innerHTML=htmlStr;
 	      	});	
-	    	function searchMessages(){
-	    		loadMessages($("#searchFilter").val());
-	    	}
-
-	    	function clearSearch(){
-	    		$("#searchFilter").val('');
-	    		loadMessages('');
-	    	}
 	    });
+		function searchMessages(){
+    		loadMessages($("#searchFilter").val());
+    	}
+
+    	function clearSearch(){
+    		$("#searchFilter").val('');
+    		loadMessages('');
+    	}
 	</script>
 	<style>
     	html, body { height:100%; }
